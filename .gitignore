@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+scramjet/
+
+# Local environment variables & Logs
+.env
+.env.local

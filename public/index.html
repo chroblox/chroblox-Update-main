@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en" data-mode="dark" data-theme="sakura">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Chroblox | Workspace v1.4</title>
+    <meta name="description" content="Chroblox is a fast, secure web proxy optimized for Chromebooks." />
+    
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="index.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <script src="/scram/scramjet.all.js"></script>
+    <script src="/baremux/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4761281742564485" crossorigin="anonymous"></script>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="6cab02bf-b484-4f0b-86f5-f87401d1975a"></script>
+</head>
+
+<body>
+
+    <!-- BOOT SPOOF SCREEN -->
+    <div id="boot-screen">
+        <div class="boot-fake-nav">
+            <span class="boot-nav-dot"></span>
+            Student Learning Portal
+            <span class="boot-nav-right">District Network &nbsp;|&nbsp; Secure</span>
+        </div>
+        <div class="boot-fake-body">
+            <div class="boot-fake-card"></div>
+            <div class="boot-fake-card" style="opacity:0.5;"></div>
+            <div class="boot-fake-card" style="opacity:0.3;"></div>
+        </div>
+        <div class="boot-overlay">
+            <div class="boot-logo">CHROBLOX <span class="ac">OS</span></div>
+            <p class="boot-sub">Your Escape Workspace</p>
+        </div>
+    </div>
+
+    <canvas id="bg" style="position:fixed; top:0; left:0; z-index:-2;"></canvas>
+    <div id="tsparticles" class="bg-layer"></div>
+    <div id="svg-bg-layer" class="bg-layer"></div>
+    <div class="flur" id="flur"></div>
+
+    <button id="mobile-menu-btn" class="mobile-toggle">☰</button>
+
+    <div class="stealth-controls" id="stealth-controls">
+        
+        <button class="support-btn-premium" onclick="triggerSupportAd()">
+            <span class="heart-icon">💖</span> 
+            Support Us 
+            <span class="click-badge">1 Click</span>
+        </button>
+
+        <button id="mode-tog" class="stealth-pill-btn">🌙 Mode</button>
+        <div style="position: relative;">
+            <button id="t-tog" class="stealth-pill-btn">🎨 Themes</button>
+            <div id="t-menu" class="stealth-menu hidden">
+                <button class="m-item active" onclick="setTheme('sakura')">🌸 Sakura White</button>
+                <button class="m-item" onclick="setTheme('blue')">🔵 Ocean Blue</button>
+                <button class="m-item" onclick="setTheme('gold')">🔥 Golden Fire</button>
+                <button class="m-item" onclick="setTheme('purple')">🟣 Cyber Purple</button>
+                <button class="m-item" onclick="setTheme('green')">🟢 Matrix Green</button>
+                <button class="m-item" onclick="setTheme('dark')">🔴 Default Red</button>
+            </div>
+        </div>
+        <div style="position: relative;">
+            <button id="stealth-btn" class="stealth-pill-btn red-accent" title="Mask Tab">
+                <span class="stealth-icon">👻</span> Mask Tab
+            </button>
+            <div id="stealth-menu" class="stealth-menu hidden" style="right:0;">
+                <button class="m-item" onclick="handleCloak('none')">❌ Remove Mask</button>
+                <button class="m-item" onclick="handleCloak('drive')">📄 Google Drive</button>
+                <button class="m-item" onclick="handleCloak('classroom')">🏫 Google Classroom</button>
+                <button class="m-item" onclick="handleCloak('blooket')">🟦 Blooket</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="update-overlay" class="hidden">
+        <div class="update-content glass-panel">
+            <div class="update-header">
+                <h2>🚀 Chroblox <span class="ac">v1.4</span> is here!</h2>
+                <p style="color: var(--text-muted); margin-top: 5px;">451 games, better browser, & legal pages.</p>
+            </div>
+            <div class="update-body">
+                <ul>
+                    <li><strong>🎮 451 Games:</strong> Massive game catalog with cover art, powered by direct iframe loading.</li>
+                    <li><strong>🔍 Fast Search:</strong> Instant game search with debounced filtering — no more lag.</li>
+                    <li><strong>🌐 Browser Upgrade:</strong> Back, forward, and reload buttons with a search icon.</li>
+                    <li><strong>📜 Legal Pages:</strong> Privacy Policy, Terms of Service, and DMCA — all in Settings.</li>
+                    <li><strong>📱 Mobile Fixes:</strong> Touch support for proxy, better game grid, and sidebar handling.</li>
+                </ul>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin: 15px 0 5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">v1.3 — Previous Update</p>
+                <ul>
+                    <li><strong>🖥️ Server Upgrade:</strong> Migrated to a dedicated server — faster, more stable.</li>
+                    <li><strong>📢 Smarter Ads:</strong> Less spammy ad system — no interruptions during gameplay.</li>
+                </ul>
+            </div>
+            <button id="close-update-btn" class="launch-btn" style="width:100%; margin-top: 15px; padding: 15px;">Let's go!</button>
+        </div>
+    </div>
+
+    <div id="anti-adblock-overlay" class="hidden">
+        <div class="adblock-modal">
+            <img src='sj.png' alt="Chroblox" onerror="this.src='favicon.ico'" />
+            <h2>Ads keep us running</h2>
+            <p>Chroblox is free because of ads. Please whitelist this site to keep the servers online.</p>
+            <button onclick="location.reload()">I've whitelisted it — Reload</button>
+        </div>
+    </div>
+
+    <div class="webos-container" id="home-ui">
+        
+        <aside class="sidebar" id="main-sidebar">
+            <button id="desktop-collapse-btn" class="collapse-btn" title="Toggle Sidebar">
+                <span class="chevron">❮</span>
+            </button>
+            
+            <div class="sidebar-inner">
+                <div class="brand">
+                    <img src="sj.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="bmark" style="display:none;">C</div>
+                    <h2 class="sidebar-text" style="margin:0;">CHRO<span class="ac">BLOX</span></h2>
+                </div>
+                
+                <div class="nav-menu" id="main-nav">
+                    <button class="nav-item active" data-target="view-launch">
+                        <span class="icon">🚀</span> <span class="sidebar-text">Launch</span>
+                    </button>
+                    <button class="nav-item" data-target="view-games">
+                        <span class="icon">🎮</span> <span class="sidebar-text">Games</span>
+                    </button>
+                    <button class="nav-item" data-target="view-browser">
+                        <span class="icon">🌐</span> <span class="sidebar-text">Browser</span>
+                    </button>
+                    <button class="nav-item" data-target="view-movies">
+                        <span class="icon">🎬</span> <span class="sidebar-text">Movies</span>
+                    </button>
+                    <button class="nav-item" data-target="view-settings">
+                        <span class="icon">⚙️</span> <span class="sidebar-text">Settings</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-widgets">
+                    <div class="gd7-widget">
+                        <p class="widget-title sidebar-text">Creator & Tutorials</p>
+                        <a href="https://www.youtube.com/@Gd7OS" target="_blank" class="yt-btn">
+                            <svg class="official-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            <span class="sidebar-text">Gd7 OS</span>
+                        </a>
+                    </div>
+                    <div class="gd7-widget discord-widget">
+                        <p class="widget-title sidebar-text">Community</p>
+                        <a href="https://discord.gg/AbrmZFwppU" target="_blank" class="discord-btn">
+                            <svg class="official-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                            <span class="sidebar-text">Discord</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="workspace">
+            
+            <div id="view-launch" class="view-section active">
+
+                <!-- CENTER: OS HUB -->
+                <div class="os-hub">
+
+                    <div class="hub-header">
+                        <h1 class="hub-title">CHROBLOX <span class="ac">OS</span></h1>
+                        <span id="os-clock" class="hub-clock">--:--</span>
+                    </div>
+
+                    <!-- Omnibar (reuses sj-form / sj-address IDs for JS compatibility) -->
+                    <form id="sj-form" class="os-omnibar">
+                        <input id="sj-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
+                        <span class="omni-icon">🔍</span>
+                        <input id="sj-address" type="text" placeholder="Search or enter a URL to bypass filters..." autocomplete="off" />
+                        <button type="submit" class="omni-submit">↵</button>
+                    </form>
+
+                    <!-- App Widget Grid -->
+                    <div class="os-grid">
+
+                        <div class="os-widget w-games" onclick="switchView('view-games')">
+                            <div class="widget-content">
+                                <h3>Game Vault</h3>
+                                <p>451+ HTML5 games</p>
+                                <button class="widget-action-btn" onclick="event.stopPropagation();switchView('view-games')">▶ Play Now</button>
+                            </div>
+                        </div>
+
+                        <div class="os-widget w-movies" onclick="switchView('view-movies')">
+                            <div class="widget-content">
+                                <h3>Movie Center</h3>
+                                <p>Stream anything</p>
+                                <span class="coming-soon-pill">🔜 Coming Soon</span>
+                            </div>
+                        </div>
+
+                        <div class="os-widget w-spotify" onclick="launchBrowser('https://open.spotify.com/')">
+                            <div class="w-app-icon" style="background:#1DB954;">♪</div>
+                            <div class="w-app-info"><h4>Spotify</h4><p>Music, unblocked</p></div>
+                            <button class="w-app-btn" style="background:#1DB954;" onclick="event.stopPropagation();launchBrowser('https://open.spotify.com/')">▶</button>
+                        </div>
+
+                        <div class="os-widget w-discord" onclick="launchBrowser('https://discord.com/app')">
+                            <div class="w-app-icon" style="background:#5865F2;">💬</div>
+                            <div class="w-app-info"><h4>Discord</h4><div class="w-live-badge">● Live</div></div>
+                            <button class="w-app-btn" style="background:#5865F2;" onclick="event.stopPropagation();launchBrowser('https://discord.com/app')">Join</button>
+                        </div>
+
+                        <div class="os-widget w-youtube" onclick="launchBrowser('https://youtube.com/')">
+                            <div class="w-app-icon" style="background:#ff0000;font-size:1.4rem;">▶</div>
+                            <div class="w-app-info"><h4>YouTube</h4><p>Watch freely</p></div>
+                        </div>
+
+                        <div class="os-widget w-tiktok" onclick="launchBrowser('https://tiktok.com/')">
+                            <div class="w-app-icon" style="background:#010101;color:#69C9D0;">♪</div>
+                            <div class="w-app-info"><h4>TikTok</h4><p>Live & trending</p></div>
+                        </div>
+
+                        <div class="os-widget w-instagram" onclick="launchBrowser('https://instagram.com/')">
+                            <div class="w-app-icon" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">📷</div>
+                            <div class="w-app-info"><h4>Instagram</h4><p>Stories & reels</p></div>
+                        </div>
+
+                        <div class="os-widget w-snapchat" onclick="launchBrowser('https://web.snapchat.com/')">
+                            <div class="w-app-icon" style="background:#FFFC00;color:#000;">👻</div>
+                            <div class="w-app-info"><h4>Snapchat</h4><p>Web snaps</p></div>
+                        </div>
+
+                    </div>
+
+                    <!-- Quick Launch Tray -->
+                    <div class="jump-section">
+                        <p class="jump-label">⚡ Quick Launch</p>
+                        <div class="jump-tray">
+                            <div class="jump-card" onclick="switchView('view-browser')">
+                                <div class="jump-icon">🌐</div>
+                                <div class="jump-info"><h4>Stealth Browser</h4><p>Full proxy access</p></div>
+                            </div>
+                            <div class="jump-card" onclick="switchView('view-games')">
+                                <div class="jump-icon">🕹️</div>
+                                <div class="jump-info"><h4>Game Vault</h4><p>451+ titles</p></div>
+                            </div>
+                            <div class="jump-card" onclick="launchBrowser('https://docs.google.com')">
+                                <div class="jump-icon">📄</div>
+                                <div class="jump-info"><h4>Google Docs</h4><p>Stay productive</p></div>
+                            </div>
+                            <div class="jump-card" onclick="launchBrowser('https://classroom.google.com')">
+                                <div class="jump-icon">🏫</div>
+                                <div class="jump-info"><h4>Classroom</h4><p>Google Classroom</p></div>
+                            </div>
+                            <div class="jump-card" onclick="launchBrowser('https://open.spotify.com')">
+                                <div class="jump-icon">🎵</div>
+                                <div class="jump-info"><h4>Spotify</h4><p>Unblocked music</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="error-container" style="display:none;">
+                        <p id="sj-error"></p>
+                        <pre id="sj-error-code"></pre>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT: AI WORKSPACE PANEL -->
+                <aside class="ai-panel" id="ai-panel">
+                    <div class="ai-panel-header">
+                        <h2>✨ AI Workspace</h2>
+                        <button class="ai-panel-toggle" id="ai-panel-toggle" title="Collapse">‹</button>
+                    </div>
+                    <div class="ai-chat-history" id="ai-history">
+                        <div class="ai-msg ai">Welcome back! Need homework help, or just here to explore?</div>
+                    </div>
+                    <div class="ai-chat-input">
+                        <input type="text" id="ai-msg-input" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendAiMsg()" />
+                        <button onclick="sendAiMsg()">↑</button>
+                    </div>
+                </aside>
+
+            </div>
+
+            <div id="view-proxy" class="view-section hidden" style="padding: 0; position: relative;">
+                <button id="nav-home" class="floating-exit-btn" title="Drag to move">❌ Exit Game</button>
+                <div id="proxy-frame-container" class="proxy-frame-container">
+                    <div id="proxy-loader" class="hidden">
+                        <div class="loader-ring"></div>
+                        <div class="loader-text">IGNITING...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-browser" class="view-section hidden" style="padding: 0;">
+                <div class="browser-app">
+                    <div class="browser-tab-bar">
+                        <div id="browser-tabs-list" class="tabs-scroll">
+                            <button class="new-tab-btn" onclick="createNewBrowserTab()">+</button>
+                        </div>
+                    </div>
+                    <div class="proxy-top-bar browser-toolbar-custom">
+                        <div class="nav-controls">
+                            <button onclick="goBackBrowser()" title="Back">◀</button>
+                            <button onclick="goForwardBrowser()" title="Forward">▶</button>
+                            <button onclick="reloadBrowserTab()" title="Reload">↻</button>
+                        </div>
+                        <form id="browser-url-form" class="top-search-box">
+                            <input type="text" id="browser-url-bar" placeholder="Search or type a URL..." autocomplete="off" />
+                            <button type="submit" class="bar-search-btn" title="Go">🔍</button>
+                        </form>
+                    </div>
+                    <div id="browser-viewport" class="browser-viewport">
+                        <div id="browser-splash" class="browser-splash">
+                            <div class="splash-center">
+                                <div class="bmark" style="width:60px; height:60px; font-size:1.8rem; margin:0 auto 20px;">C</div>
+                                <h2 style="font-family: 'Space Grotesk', sans-serif;">Browser Hub</h2>
+                                <p style="color:var(--text-muted); margin-bottom:20px;">Multi-session unblocked surfing enabled.</p>
+                                <button class="launch-btn" style="padding: 12px 30px; font-size:1rem;" onclick="createNewBrowserTab()">Open New Tab</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-games" class="view-section hidden" style="padding: 60px;">
+                <div class="page-header" id="vault-header">
+                    <div>
+                        <h2>App Vault</h2>
+                        <p>Premium workspace applications. Source paths are hidden for security.</p>
+                    </div>
+                    <div class="game-search">
+                        <span style="color: var(--text-muted); font-size: 1.2rem;">🔍</span>
+                        <input type="text" id="game-search-input" placeholder="Find a game..." autocomplete="off" />
+                    </div>
+                </div>
+                
+                <div class="premium-games-grid" id="games-grid">
+                    <p style="color:var(--text-muted);">Syncing catalog...</p>
+                </div>
+
+                <div class="request-games-banner" style="margin-top: 50px; width: 100%; max-width: 1000px; background: rgba(var(--surface-rgb), 0.6); border: 1px solid var(--border); border-radius: 20px; padding: 35px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 1.8rem; font-family: 'Space Grotesk', sans-serif;">More coming soon...</h3>
+                    <p style="color: var(--text-muted); margin: 0 0 25px 0; font-size: 1.05rem;">Have a game you really want to play? Request it directly in our community!</p>
+                    
+                    <button class="launch-btn" style="padding: 14px 35px; font-size: 1rem; border-radius: 14px; background: #5865F2; color: #fff; box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);" onclick="window.open('https://discord.gg/AbrmZFwppU', '_blank')">
+                        <span style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                            Request Games in Discord
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="view-settings" class="view-section hidden" style="padding: 60px;">
+                <div class="page-header">
+                    <h2>System Settings</h2>
+                    <p>Customize your workspace appearance and privacy controls.</p>
+                </div>
+                
+                <div class="settings-wrapper">
+                    <div class="settings-card glass-panel">
+                        <div class="card-header">
+                            <span class="card-icon">🎨</span>
+                            <div>
+                                <h3>Appearance & Atmospheres</h3>
+                                <p>Powered by tsParticles & Global Tints.</p>
+                            </div>
+                        </div>
+                        <div class="theme-grid">
+                            <button class="theme-btn" onclick="setTheme('dark')">
+                                <div class="theme-preview" style="background: #1a1c23;"></div>Dark (Static)
+                            </button>
+                            <button class="theme-btn" onclick="setTheme('blue')">
+                                <div class="theme-preview" style="background: linear-gradient(180deg, #001220, #005b96);"></div>Deep Ocean
+                            </button>
+                            <button class="theme-btn" onclick="setTheme('purple')">
+                                <div class="theme-preview" style="background: radial-gradient(circle at center, #1b1136, #000);"></div>Cosmos
+                            </button>
+                            <button class="theme-btn" onclick="setTheme('sakura')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #ffe0e9, #ffb6c1);"></div>Sakura Fall
+                            </button>
+                            <button class="theme-btn" onclick="setTheme('gold')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #f5a623, #ff4b4b);"></div>Golden Fire
+                            </button>
+                            <button class="theme-btn" onclick="setTheme('green')">
+                                <div class="theme-preview" style="background: #000; color:#0f0; display:flex; align-items:center; justify-content:center; font-family:monospace;">0101</div>Matrix Rain
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-card glass-panel">
+                        <div class="card-header">
+                            <span class="card-icon">👻</span>
+                            <div>
+                                <h3>Privacy & Cloaking</h3>
+                                <p>Mask your tab to look like an educational tool.</p>
+                            </div>
+                        </div>
+                        <div class="theme-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="handleCloak('none')">❌ Remove Mask</button>
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="handleCloak('drive')">📄 Google Drive</button>
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="handleCloak('classroom')">🏫 Classroom</button>
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="handleCloak('blooket')">🟦 Blooket</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-card glass-panel">
+                        <div class="card-header">
+                            <span class="card-icon">📜</span>
+                            <div>
+                                <h3>Legal & Policies</h3>
+                                <p>Transparency and compliance.</p>
+                            </div>
+                        </div>
+                        <div class="theme-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="switchView('view-privacy')">🔒 Privacy Policy</button>
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="switchView('view-tos')">📋 Terms of Service</button>
+                            <button class="theme-btn" style="padding: 18px; font-size: 1rem;" onclick="switchView('view-dmca')">⚖️ DMCA</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-privacy" class="view-section hidden" style="padding: 60px;">
+                <div class="legal-page" style="max-width: 760px; width: 100%;">
+                    <button class="legal-back-btn" onclick="switchView('view-settings')">← Back to Settings</button>
+                    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:900; margin: 20px 0 5px;">Privacy <span class="ac">Policy</span></h2>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:30px;">Last updated: April 5, 2026</p>
+                    
+                    <p style="color:var(--text-muted); line-height:1.8; margin-bottom:30px; padding-bottom:25px; border-bottom:1px solid var(--border);">Your privacy matters to us. This policy explains what data Chroblox collects, how we use it, and your rights.</p>
+
+                    <div class="legal-section">
+                        <h3>1. Data We Collect</h3>
+                        <p>Chroblox does not require user accounts or registration. When you use our service, we may collect anonymous usage analytics via Umami Analytics, browser-stored preferences (theme, sidebar state) via localStorage which never leaves your device, and standard server logs processed by our hosting provider.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>2. How We Use Your Data</h3>
+                        <p>We use collected data to understand how users interact with the site, monitor server performance and prevent abuse, and display advertisements through our ad partners.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>3. Third-Party Services</h3>
+                        <p>We use Umami Analytics (privacy-focused, no cookies), Adsterra (advertising partner, may use cookies), and Cloudflare (DNS and security). Please refer to their respective privacy policies for details.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>4. Cookies and Tracking</h3>
+                        <p>Chroblox itself does not set tracking cookies. Our advertising partners may use cookies to serve and measure ads. You can disable third-party cookies through your browser settings.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>5. Proxy and Browsing Data</h3>
+                        <p>Pages you visit through the proxy are routed through our server but we do not log, store, or monitor the content of your proxied browsing sessions.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>6. Children's Privacy</h3>
+                        <p>Our service is not directed to children under 13. We do not knowingly collect personal data from children. If you believe a child has provided us data, please contact us for removal.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>7. Changes</h3>
+                        <p>We may update this policy periodically. Continued use constitutes acceptance.</p>
+                    </div>
+                    <div class="legal-contact">Contact: <a href="mailto:Contact.Chroblox@gmail.com" style="color:var(--ac); text-decoration:none; font-weight:700;">Contact.Chroblox@gmail.com</a></div>
+                </div>
+            </div>
+
+            <div id="view-tos" class="view-section hidden" style="padding: 60px;">
+                <div class="legal-page" style="max-width: 760px; width: 100%;">
+                    <button class="legal-back-btn" onclick="switchView('view-settings')">← Back to Settings</button>
+                    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:900; margin: 20px 0 5px;">Terms of <span class="ac">Service</span></h2>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:30px;">Last updated: April 5, 2026</p>
+                    
+                    <p style="color:var(--text-muted); line-height:1.8; margin-bottom:30px; padding-bottom:25px; border-bottom:1px solid var(--border);">By accessing or using Chroblox, you agree to these Terms of Service.</p>
+
+                    <div class="legal-section">
+                        <h3>1. Acceptance of Terms</h3>
+                        <p>By using Chroblox, you confirm that you are at least 13 years of age and agree to these terms.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>2. Description of Service</h3>
+                        <p>Chroblox provides a web proxy service and access to a curated catalog of browser-based games for entertainment purposes. The service is free and supported by advertising.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>3. Acceptable Use</h3>
+                        <p>You must not attempt to hack or reverse-engineer our platform, use automated tools to abuse the service, use the proxy to access illegal content, interfere with service availability, or bypass the advertising system.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>4. Game Content</h3>
+                        <p>Games are embedded from third-party sources. We do not claim ownership over embedded content. All trademarks and copyrights belong to their respective owners.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>5. Proxy Service</h3>
+                        <p>The web proxy is provided as a convenience. You are solely responsible for your browsing activity and compliance with applicable laws.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>6. Disclaimers</h3>
+                        <p>The service is provided "as is" without warranties. We are not liable for damages arising from your use of the platform, proxy, or linked games.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>7. Changes</h3>
+                        <p>We may update these terms at any time. Continued use constitutes acceptance.</p>
+                    </div>
+                    <div class="legal-contact">Contact: <a href="mailto:Contact.Chroblox@gmail.com" style="color:var(--ac); text-decoration:none; font-weight:700;">Contact.Chroblox@gmail.com</a></div>
+                </div>
+            </div>
+
+            <div id="view-dmca" class="view-section hidden" style="padding: 60px;">
+                <div class="legal-page" style="max-width: 760px; width: 100%;">
+                    <button class="legal-back-btn" onclick="switchView('view-settings')">← Back to Settings</button>
+                    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:900; margin: 20px 0 5px;">DMCA <span class="ac">Policy</span></h2>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:30px;">Last updated: April 5, 2026</p>
+                    
+                    <p style="color:var(--text-muted); line-height:1.8; margin-bottom:30px; padding-bottom:25px; border-bottom:1px solid var(--border);">Chroblox respects intellectual property rights and complies with the Digital Millennium Copyright Act (DMCA).</p>
+
+                    <div class="legal-section">
+                        <h3>Filing a DMCA Takedown Request</h3>
+                        <p>To submit a valid DMCA notice, send a written request to Contact.Chroblox@gmail.com including: a physical or electronic signature of the copyright owner, identification of the copyrighted work, identification of the infringing material and its location on our site, your contact information, a good-faith belief statement, and a statement under penalty of perjury that the information is accurate.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>Counter-Notification</h3>
+                        <p>If you believe your content was removed in error, you may send a counter-notice to the same email address with the required DMCA counter-notification elements.</p>
+                    </div>
+                    <div class="legal-section">
+                        <h3>Repeat Infringers</h3>
+                        <p>We reserve the right to remove content and terminate access for repeat infringers.</p>
+                    </div>
+                    <div class="legal-contact">DMCA notices: <a href="mailto:Contact.Chroblox@gmail.com" style="color:var(--ac); text-decoration:none; font-weight:700;">Contact.Chroblox@gmail.com</a></div>
+                </div>
+            </div>
+
+            <div id="view-movies" class="view-section hidden" style="padding: 60px;">
+                <div class="page-header">
+                    <h2>Movie <span class="ac">Center</span></h2>
+                    <p>Stream movies and TV shows, completely unblocked.</p>
+                </div>
+                <div class="movies-coming">
+                    <div class="movies-coming-icon">🎬</div>
+                    <h3>Coming in v1.5</h3>
+                    <p>We're loading up hundreds of movies and TV shows. Stream anything, right here — no accounts, no restrictions.</p>
+                    <button class="launch-btn" style="margin-top:24px;padding:14px 35px;" onclick="window.open('https://discord.gg/AbrmZFwppU','_blank')">Get Notified on Discord</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+    <div id="proxy-ad-banner-top">
+        <button id="close-ad-top-btn" title="Close">×</button>
+        <div class="ad-content">
+            <script>atOptions={'key':'e5329f54bea294b733b7ba46c03c2250','format':'iframe','height':90,'width':728,'params':{}};</script>
+            <script src="https://hospitalforgery.com/e5329f54bea294b733b7ba46c03c2250/invoke.js"></script>
+        </div>
+    </div>
+
+    <div id="proxy-ad-banner-bottom">
+        <button id="close-ad-bottom-btn" title="Close">×</button>
+        <div class="ad-content">
+            <script>atOptions={'key':'e5329f54bea294b733b7ba46c03c2250','format':'iframe','height':90,'width':728,'params':{}};</script>
+            <script src="https://hospitalforgery.com/e5329f54bea294b733b7ba46c03c2250/invoke.js"></script>
+        </div>
+    </div>
+
+    <div id="sleep-overlay" class="hidden">
+        <div class="sleep-content glass-panel">
+            <h2>Session Paused</h2>
+            <p>You've been idle for 15 minutes. We paused your connection to keep the servers fast.</p>
+            <button onclick="location.reload()">Return to Menu</button>
+        </div>
+    </div>
+    
+    <script src="register-sw.js?v=1.4.0"></script>
+    <script src="search.js?v=1.4.0"></script>
+    <script src="index.js?v=1.4.0"></script>
+</body>
+</html>
