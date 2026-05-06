@@ -55,6 +55,7 @@ body {
 
 .ac { color: var(--ac); transition: color 0.5s; }
 
+.canvas-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; }
 .bg-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; transition: opacity 0.5s ease; }
 #svg-bg-layer { z-index: -1; }
 .flur { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 80% 20%, var(--ag) 0%, transparent 50%); pointer-events: none; z-index: 1; opacity: var(--aura-op); transition: 0.8s; }
