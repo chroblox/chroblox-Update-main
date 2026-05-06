@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700;900&display=swap");
+
+:root {
+  --ac: #ff85a1; 
+  --ag: rgba(255,133,161,0.6); 
+  --nb: rgba(255,133,161,0.12);
+  --glass-blur: blur(22px) saturate(160%);
+  --glass-fill: rgba(255,255,255,0.045);
+  --glass-fill-h: rgba(255,255,255,0.085);
+  --glass-fill-strong: rgba(255,255,255,0.07);
+  --glass-bord: rgba(255,255,255,0.09);
+  --glass-bord-h: rgba(255,255,255,0.18);
+  --glass-sheen: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0.025) 100%);
+  --chro-green: #22c55e;
+  --chro-green-glow: rgba(34, 197, 94, 0.6);
+}
+
+[data-mode="dark"] {
+  --bg: #0a0c10; --surface-rgb: 20, 24, 32; --surface-solid: #141820; 
+  --border: rgba(255, 255, 255, 0.08); --border2: rgba(255, 255, 255, 0.15);
+  --text: #ffffff; --text-muted: #8b949e;
+  --surface: rgba(var(--surface-rgb), 0.7);
+  --surface2: rgba(var(--surface-rgb), 0.9);
+  --aura-op: 0.35;
+  --sh: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+[data-mode="light"] {
+  --surface-rgb: 255, 255, 255; --surface-solid: #ffffff;
+  --border: rgba(0,0,0,0.1); --border2: rgba(0,0,0,0.2);
+  --text: #000000; 
+  --text-muted: #4b5563; 
+  --surface: rgba(var(--surface-rgb), 0.7);
+  --surface2: rgba(var(--surface-rgb), 0.9);
+  --aura-op: 0.08;
+  --sh: 0 15px 40px rgba(0,0,0,0.08);
+  --glass-fill: rgba(255,255,255,0.5);
+  --glass-fill-h: rgba(255,255,255,0.7);
+  --glass-fill-strong: rgba(255,255,255,0.6);
+  --glass-bord: rgba(0,0,0,0.08);
+  --glass-bord-h: rgba(0,0,0,0.18);
+}
+
+[data-mode="light"][data-theme="sakura"] { --bg: #fff2f5; }
+[data-mode="light"][data-theme="blue"]   { --bg: #f0f9ff; }
+[data-mode="light"][data-theme="gold"]   { --bg: #fffcf0; }
+[data-mode="light"][data-theme="purple"] { --bg: #f9f5ff; }
+[data-mode="light"][data-theme="green"]  { --bg: #f5fff8; }
+[data-mode="light"][data-theme="dark"]   { --bg: #fff5f5; }
+
+body {
+    font-family: "Inter", Arial, sans-serif; margin: 0; background-color: var(--bg);
+    color: var(--text); overflow: hidden !important; transition: background-color 0.8s ease; width: 100%; height: 100%;
+}
+
+.ac { color: var(--ac); transition: color 0.5s; }
+
+.bg-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; transition: opacity 0.5s ease; }
+#svg-bg-layer { z-index: -1; }
+.flur { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 80% 20%, var(--ag) 0%, transparent 50%); pointer-events: none; z-index: 1; opacity: var(--aura-op); transition: 0.8s; }
