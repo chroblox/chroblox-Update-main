@@ -38,8 +38,8 @@
 .proxy-frame-container { flex-grow: 1; width: 100%; height: 100%; position: relative; background: #000; }
 #sj-frame { border: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; background-color: #000; touch-action: auto; }
 
-#view-proxy { padding: 90px 20px 110px 20px !important; margin: 0 !important; height: 100% !important; width: 100% !important; background: transparent !important; border-radius: 0 !important; box-sizing: border-box !important; }
-#view-browser { padding: 90px 20px 110px 20px !important; margin: 0 !important; height: 100% !important; width: 100% !important; background: transparent !important; border-radius: 0 !important; box-sizing: border-box !important; }
+#view-proxy { padding: 0 !important; margin: 0 !important; height: 100% !important; width: 100% !important; background: #0a0c10 !important; border-radius: 0 !important; }
+#view-browser { padding: 0 !important; margin: 0 !important; height: 100% !important; width: 100% !important; background: #0a0c10 !important; border-radius: 0 !important; }
 #view-browser:not(.hidden) { display: flex !important; flex-direction: column !important; }
 .browser-viewport { flex: 1 !important; height: auto !important; width: 100% !important; margin: 0 !important; padding: 0 !important; position: relative !important; }
 .browser-iframe { width: 100% !important; height: 100% !important; border: 0 !important; display: block !important; }
@@ -81,7 +81,7 @@
     .mobile-toggle { display: block !important; }
     .launch-main { padding: 80px 18px 40px 18px; gap: 14px; }
     .view-section { padding: 80px 20px 40px 20px !important; }
-    .core-hub { padding: 8px 0; }
+    .core-hub { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; margin: auto; width: 100%; max-width: 880px; position: relative !important; z-index: 5; }
     .stealth-controls { top: 14px !important; right: 14px !important; gap: 6px !important; max-width: calc(100vw - 80px) !important; flex-wrap: wrap !important; justify-content: flex-end !important; }
     .stealth-pill-btn, .support-btn-premium { padding: 6px 10px !important; font-size: 0.78rem !important; }
     .click-badge { font-size: 0.65rem !important; padding: 2px 6px !important; }

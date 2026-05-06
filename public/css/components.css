@@ -71,7 +71,7 @@
 .app-card:hover .app-icon { transform: scale(1.15); }
 .app-card .app-title { font-family: 'Inter', sans-serif; font-weight: 700; margin: 0; color: var(--text); position: relative; z-index: 2; letter-spacing: -0.1px; }
 
-.carousel-wrap { position: relative; width: 100%; max-width: 100%; box-sizing: border-box; flex-shrink: 0; height: clamp(160px, 22vh, 220px); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent); mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent); }
+.carousel-wrap { position: relative; width: 100%; max-width: 100%; box-sizing: border-box; flex-shrink: 0; height: clamp(160px, 22vh, 220px); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent); mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent); margin-top: auto; }
 .carousel-track { display: flex; gap: 14px; height: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; padding: 4px 0; }
 .carousel-skeleton { color: var(--text-muted); font-size: 0.85rem; padding: 60px 30px; align-self: center; margin: auto; }
 .carousel-card { flex: 0 0 clamp(150px, 17vw, 200px); height: 100%; border-radius: 18px; background: var(--glass-fill); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-bord); position: relative; overflow: hidden; cursor: pointer; box-shadow: 0 12px 30px rgba(0,0,0,0.3); transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; }
