@@ -5,3 +5,5 @@ scramjet/
 # Local environment variables & Logs
 .env
 .env.local
+
+public/movies.json

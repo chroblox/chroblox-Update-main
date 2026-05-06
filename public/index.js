@@ -208,7 +208,6 @@ function switchView(targetId) {
         }
     }
 
-
     currentView = actualView;
     handleViewBanners(actualView);
 }
@@ -220,7 +219,7 @@ navButtons.forEach(btn => {
 });
 
 window.handleCloak = function(type) {
-    let title = "Chroblox | Workspace v1.4";
+    let title = "Chroblox | Workspace v1.5";
     let icon = "favicon.ico";
 
     if (type === 'drive') {
@@ -924,93 +923,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadGameCatalog();
     handleViewBanners('view-launch');
     setTimeout(runAdblockCheck, 1200);
-
-    const seenUpdate = localStorage.getItem("chroblox-v1.4-seen");
+    
+    const seenUpdate = localStorage.getItem("chroblox-v1.5-seen");
     if (!seenUpdate) {
         const updateOverlay = document.getElementById("update-overlay");
-        if (updateOverlay) updateOverlay.classList.remove("hidden");
+        // Delay until after boot sequence completes (~4.2s) so it doesn't fight the decoy
+        if (updateOverlay) setTimeout(() => updateOverlay.classList.remove("hidden"), 4400);
     }
 
     document.getElementById("close-update-btn")?.addEventListener("click", () => {
-        localStorage.setItem("chroblox-v1.4-seen", "true");
+        localStorage.setItem("chroblox-v1.5-seen", "true");
         document.getElementById("update-overlay").classList.add("hidden");
     });
-
-    // Boot screen dismiss
-    const bootScreen = document.getElementById('boot-screen');
-    if (bootScreen) {
-        setTimeout(() => {
-            bootScreen.classList.add('fade-out');
-            setTimeout(() => bootScreen.remove(), 700);
-        }, 3300);
-    }
-
-    // OS Hub clock
-    const osClock = document.getElementById('os-clock');
-    if (osClock) {
-        const tick = () => {
-            const d = new Date();
-            osClock.textContent = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
-        };
-        tick();
-        setInterval(tick, 1000);
-    }
-
-    // AI Panel collapse toggle
-    const aiPanel = document.getElementById('ai-panel');
-    const aiToggle = document.getElementById('ai-panel-toggle');
-    if (aiPanel && aiToggle) {
-        if (localStorage.getItem('ai-panel-collapsed') === 'true') {
-            aiPanel.classList.add('collapsed');
-            aiToggle.textContent = '›';
-        }
-        aiToggle.addEventListener('click', () => {
-            aiPanel.classList.toggle('collapsed');
-            const isCollapsed = aiPanel.classList.contains('collapsed');
-            aiToggle.textContent = isCollapsed ? '›' : '‹';
-            localStorage.setItem('ai-panel-collapsed', isCollapsed);
-        });
-    }
 });
-
-// AI Chat (placeholder — real backend coming in next update)
-const AI_PLACEHOLDER_RESPONSES = [
-    "AI chat backend is coming soon in v1.5! Stay tuned.",
-    "I'm just a placeholder right now — the real AI is almost ready.",
-    "Great question! Full AI support drops with the next update.",
-];
-let _aiMsgCount = 0;
-
-window.sendAiMsg = function() {
-    const input = document.getElementById('ai-msg-input');
-    const history = document.getElementById('ai-history');
-    if (!input || !history || !input.value.trim()) return;
-
-    const text = input.value.trim();
-    input.value = '';
-
-    const userDiv = document.createElement('div');
-    userDiv.className = 'ai-msg user';
-    userDiv.textContent = text;
-    history.appendChild(userDiv);
-    history.scrollTop = history.scrollHeight;
-
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'ai-typing';
-    typingDiv.textContent = 'Thinking...';
-    history.appendChild(typingDiv);
-    history.scrollTop = history.scrollHeight;
-
-    setTimeout(() => {
-        typingDiv.remove();
-        const aiDiv = document.createElement('div');
-        aiDiv.className = 'ai-msg ai';
-        aiDiv.textContent = AI_PLACEHOLDER_RESPONSES[_aiMsgCount % AI_PLACEHOLDER_RESPONSES.length];
-        _aiMsgCount++;
-        history.appendChild(aiDiv);
-        history.scrollTop = history.scrollHeight;
-    }, 900);
-};
 
 const gameBtn = document.querySelector('[data-target="view-games"]');
 if (gameBtn) gameBtn.addEventListener('click', loadGameCatalog);
@@ -1031,3 +956,740 @@ if (searchInput) {
 }
 
 if (cx) render();
+// ==========================================
+// 5. v1.5.5 — BOOT SEQUENCE
+//    decoy (calculus) → "STUDY HUB" (educational name) → CHROBLOX → workspace
+//    Total ~4.0s (was 5.2s)
+// ==========================================
+(function bootSequence() {
+    const screen     = document.getElementById('boot-screen');
+    if (!screen) return;
+    const decoy      = document.getElementById('boot-decoy');
+    const nameReveal = document.getElementById('boot-name');
+    const eduName    = document.getElementById('boot-edu-name');
+    const chroName   = document.getElementById('boot-chro-name');
+    const ws         = document.getElementById('home-ui');
+    const sc         = document.getElementById('stealth-controls');
+
+    if (ws) ws.classList.add('boot-fade');
+    if (sc) sc.classList.add('boot-hidden');
+
+    // Phase 1 — calculus decoy for 2.5s (filter scanners snap during this window)
+    setTimeout(() => {
+        if (decoy) decoy.classList.add('hidden');
+        if (nameReveal) nameReveal.classList.add('show');
+        // Phase 2 — "STUDY HUB" educational name fades in (already animated via CSS)
+
+        // Phase 3 — after 700ms, fade out edu and reveal CHROBLOX
+        setTimeout(() => {
+            if (eduName)  eduName.classList.add('fade-out');
+            setTimeout(() => {
+                if (eduName)  eduName.style.display = 'none';
+                if (chroName) chroName.classList.add('show');
+            }, 240);
+
+            // Phase 4 — after 700ms more, fade boot screen, restore workspace
+            setTimeout(() => {
+                if (screen) screen.classList.add('fade-out');
+                if (ws)     ws.classList.remove('boot-fade');
+                if (sc)     sc.classList.remove('boot-hidden');
+                setTimeout(() => { if (screen) screen.classList.add('hidden'); }, 500);
+            }, 700);
+        }, 700);
+    }, 2500);
+})();
+
+// ==========================================
+// 6. v1.5 — AI WORKSPACE STUB (launch-panel chat)
+//     Real conversational mode coming as a pending v1.5 update
+// ==========================================
+(function setupAI() {
+    const form    = document.getElementById('ai-form');
+    const input   = document.getElementById('ai-input');
+    const history = document.getElementById('ai-history');
+    if (!form || !input || !history) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = input.value.trim();
+        if (!val) return;
+
+        // Echo user message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'ai-msg user';
+        userMsg.textContent = val;
+        history.appendChild(userMsg);
+        input.value = '';
+        history.scrollTop = history.scrollHeight;
+
+        // Canned "in progress" reply
+        setTimeout(() => {
+            const sysMsg = document.createElement('div');
+            sysMsg.className = 'ai-msg system';
+            sysMsg.textContent = '⚡ AI update in progress — full conversational mode coming soon as a pending v1.5 update.';
+            history.appendChild(sysMsg);
+            history.scrollTop = history.scrollHeight;
+        }, 500);
+    });
+})();
+
+// ==========================================
+// 7. v1.5.1 — APP CAROUSEL
+//    Sites + Game Vault + Movie Center + 10 random games from games.json
+//    Auto-scrolls left, pauses on hover/touch, seamless loop
+// ==========================================
+(function setupCarousel() {
+    const track = document.getElementById('apps-carousel');
+    const wrap  = document.getElementById('carousel-wrap');
+    if (!track || !wrap) return;
+
+    // ─── Card data: feature blocks + sites + games ───
+    const FEATURES = [
+        {
+            kind: 'feature',
+            title: 'Game Vault',
+            sub: '451 unblocked HTML5 titles',
+            cta: '▶ Open Vault',
+            brand: '#ff4757',
+            bg: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.1) 100%), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&q=80') center/cover",
+            click: () => switchView('view-games')
+        },
+        {
+            kind: 'feature',
+            title: 'Movie Center',
+            sub: 'Rolling out · Pending update',
+            cta: '🕒 Coming Soon',
+            brand: '#6366f1',
+            bg: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.1) 100%), url('https://images.unsplash.com/photo-1616530940355-351fabd9524b?w=600&q=80') center/cover",
+            click: () => switchView('view-movies')
+        }
+    ];
+
+    const SITES = [
+        {
+            kind: 'site', title: 'Netflix', sub: 'Movies & TV', cta: '▶ Launch', brand: '#E50914',
+            iconSvg: '<svg viewBox="0 0 24 24"><path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.926-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.045-15.913.011-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z"/></svg>',
+            click: () => launchBrowser('https://www.netflix.com')
+        },
+        {
+            kind: 'site', title: 'Twitch', sub: 'Live streaming', cta: '▶ Launch', brand: '#9146FF',
+            iconSvg: '<svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>',
+            click: () => launchBrowser('https://www.twitch.tv')
+        },
+        {
+            kind: 'site', title: 'Quizlet', sub: 'Study sets & flashcards', cta: '▶ Launch', brand: '#4255FF',
+            iconSvg: '<svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12c1.49 0 2.918-.272 4.236-.768l-1.83-3.17a8.5 8.5 0 1 1 4.69-4.691l3.171 1.83A11.95 11.95 0 0 0 24 12C24 5.373 18.627 0 12 0zm0 4.4a7.6 7.6 0 0 0 0 15.2c1.05 0 2.05-.214 2.96-.6l-.95-1.65a5.7 5.7 0 1 1 3.2-3.2l1.65.95A7.6 7.6 0 0 0 12 4.4zm0 4.4a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4z"/></svg>',
+            click: () => launchBrowser('https://quizlet.com')
+        },
+        {
+            kind: 'site', title: 'Google Docs', sub: 'Write & collaborate', cta: '▶ Launch', brand: '#4285F4',
+            iconSvg: '<svg viewBox="0 0 24 24"><path d="M14.727 6.727H14V0H4.91c-.905 0-1.637.732-1.637 1.636v20.728c0 .904.732 1.636 1.636 1.636h14.182c.904 0 1.636-.732 1.636-1.636V6.727h-6zM7.91 17.318a.819.819 0 0 1 .818-.818h6.545a.819.819 0 0 1 0 1.636H8.728a.819.819 0 0 1-.818-.818zm0-3.273a.819.819 0 0 1 .818-.818h6.545a.819.819 0 0 1 0 1.637H8.728a.819.819 0 0 1-.818-.819zm0-3.272a.819.819 0 0 1 .818-.819h6.545a.819.819 0 0 1 0 1.637H8.728a.819.819 0 0 1-.818-.818zM14.727 6V0l6 6h-6z"/></svg>',
+            click: () => launchBrowser('https://docs.google.com')
+        },
+        {
+            kind: 'site', title: 'GitHub', sub: 'Code repository', cta: '▶ Launch', brand: '#333333',
+            iconSvg: '<svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>',
+            click: () => launchBrowser('https://github.com')
+        }
+    ];
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    function buildCard(item, idx) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'carousel-card cc-' + item.kind;
+        btn.style.setProperty('--brand', item.brand);
+        btn.setAttribute('aria-label', item.title);
+
+        let bgInline = '';
+        if (item.kind === 'feature') {
+            bgInline = `style="background: ${item.bg};"`;
+        } else if (item.kind === 'game' && item.img) {
+            bgInline = `style="background-image: url('${escapeHtml(item.img)}');"`;
+        }
+        // Site cards get their bg from CSS via --brand
+
+        const iconHtml = item.iconSvg
+            ? `<div class="cc-icon">${item.iconSvg}</div>`
+            : '';
+
+        btn.innerHTML = `
+            <div class="cc-bg" ${bgInline}></div>
+            <div class="cc-overlay"></div>
+            <div class="cc-shine"></div>
+            <div class="cc-content">
+                ${item.kind === 'site' ? iconHtml : ''}
+                <h3 class="cc-title">${escapeHtml(item.title)}</h3>
+                <p class="cc-sub">${escapeHtml(item.sub || '')}</p>
+                <span class="cc-cta">${escapeHtml(item.cta || '▶ Launch')}</span>
+            </div>
+        `;
+        btn.addEventListener('click', item.click);
+        return btn;
+    }
+
+    function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    async function loadGames() {
+        try {
+            const res = await fetch('/games.json', { cache: 'force-cache' });
+            if (!res.ok) return [];
+            const games = await res.json();
+            return shuffle(games).slice(0, 10).map(g => ({
+                kind: 'game',
+                title: g.name,
+                sub: 'Play now',
+                cta: '🎮 Play',
+                brand: '#ec4899',
+                img: g.img,
+                click: () => { switchView('view-games'); window.launchGame && window.launchGame(g.url); }
+            }));
+        } catch (e) {
+            return [];
+        }
+    }
+
+    async function build() {
+        const games = await loadGames();
+        // Mix it up: feature, sites + games shuffled, feature again to bookend
+        const middle = shuffle([...SITES, ...games]);
+        const cards = [FEATURES[0], ...middle.slice(0, Math.ceil(middle.length / 2)), FEATURES[1], ...middle.slice(Math.ceil(middle.length / 2))];
+
+        // Clear skeleton, render cards, then duplicate for seamless loop
+        track.innerHTML = '';
+        cards.forEach(item => track.appendChild(buildCard(item)));
+        // Duplicate for marquee loop
+        cards.forEach(item => {
+            const c = buildCard(item);
+            c.setAttribute('aria-hidden', 'true');
+            track.appendChild(c);
+        });
+
+        startAutoScroll();
+    }
+
+    function startAutoScroll() {
+        let paused = false;
+        let userActiveUntil = 0;
+        const SPEED_PX_PER_SEC = 50; // bumped — was barely visible at 28
+        let lastTime = performance.now();
+        let halfWidth = 0;
+        let pos = 0; // float position; assigned to scrollLeft each frame
+        let suppressSync = false; // ignore our own scroll events
+
+        // Recompute halfWidth when fonts/images load
+        const recompute = () => { halfWidth = track.scrollWidth / 2; };
+        setTimeout(recompute, 100);
+        setTimeout(recompute, 600);
+        setTimeout(recompute, 1500);
+        window.addEventListener('resize', recompute);
+
+        // Keep pos in sync if the user manually scrolls
+        track.addEventListener('scroll', () => {
+            if (suppressSync) { suppressSync = false; return; }
+            pos = track.scrollLeft;
+        }, { passive: true });
+
+        function tick(now) {
+            const dt = Math.min(50, now - lastTime) / 1000;
+            lastTime = now;
+
+            const userActive = now < userActiveUntil;
+            if (!paused && !userActive && halfWidth > 0) {
+                // CRITICAL: track position as a float so sub-pixel motion accumulates.
+                // Assigning fractional values to scrollLeft would truncate to 0
+                // and the carousel would freeze. Only flush to scrollLeft when
+                // the integer rounded value actually changes.
+                pos += SPEED_PX_PER_SEC * dt;
+                if (pos >= halfWidth) pos -= halfWidth;
+
+                const target = Math.round(pos);
+                if (target !== track.scrollLeft) {
+                    suppressSync = true;
+                    track.scrollLeft = target;
+                }
+            } else if (halfWidth > 0) {
+                // Wrap if user has scrolled off either end
+                if (track.scrollLeft >= halfWidth) {
+                    suppressSync = true;
+                    track.scrollLeft -= halfWidth;
+                    pos = track.scrollLeft;
+                } else if (track.scrollLeft < 0) {
+                    suppressSync = true;
+                    track.scrollLeft += halfWidth;
+                    pos = track.scrollLeft;
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        // Pause on hover (desktop)
+        wrap.addEventListener('mouseenter', () => { paused = true; });
+        wrap.addEventListener('mouseleave', () => { paused = false; });
+
+        // Pause for 2.5s after any user-initiated scroll (touch / wheel)
+        const touchPause = () => { userActiveUntil = performance.now() + 2500; };
+        track.addEventListener('wheel', touchPause, { passive: true });
+        track.addEventListener('touchstart', touchPause, { passive: true });
+        track.addEventListener('touchmove', touchPause, { passive: true });
+    }
+
+    // Defer until after boot screen finishes (~4.2s) so layout is stable
+    setTimeout(build, 4300);
+})();
+
+// ==========================================
+// 8. v1.5 — MOVIE CENTER
+//    Loads movies.json, renders poster grid with debounced search,
+//    launches selected movie via the existing Scramjet frame system,
+//    floats a provider-switcher bar so users can rotate sources
+//    when an embed dies (which happens often in this niche).
+// ==========================================
+(function setupMovies() {
+    const grid     = document.getElementById('movies-grid');
+    const searchEl = document.getElementById('movie-search-input');
+    if (!grid) return;
+
+    const PROVIDER_NAMES = [
+        'VidSrc', 'EmbedSU', 'VidLink', '111Movies', 'AutoEmbed',
+        'VidSrc.RIP', 'VidSrc.SU', '2Embed', 'SmashyStream', 'VidEasy', 'VidFast'
+    ];
+
+    let catalog = [];           // full movie list
+    let currentMovie = null;    // currently-playing movie object
+    let _lastSearchTerm = '';
+    let _searchTimer = null;
+
+    // ─── Provider switcher bar (built once, shown only while a movie plays) ───
+    function ensureProviderBar() {
+        let bar = document.getElementById('movie-provider-bar');
+        if (bar) return bar;
+        bar = document.createElement('div');
+        bar.id = 'movie-provider-bar';
+        bar.className = 'hidden';
+        bar.innerHTML = `
+            <span class="mpb-label">🎬 Source:</span>
+            <select id="mpb-select" aria-label="Switch streaming source"></select>
+            <span class="mpb-help">Black screen? Try another source.</span>
+        `;
+        document.body.appendChild(bar);
+        bar.querySelector('#mpb-select').addEventListener('change', (e) => {
+            if (currentMovie) playMovie(currentMovie, parseInt(e.target.value, 10));
+        });
+        return bar;
+    }
+
+    function showProviderBar(movie, activeIdx) {
+        const bar = ensureProviderBar();
+        const sel = bar.querySelector('#mpb-select');
+        const all = [movie.url, ...(movie.fallbacks || [])];
+        sel.innerHTML = all.map((_, i) => {
+            const name = PROVIDER_NAMES[i] || `Source ${i + 1}`;
+            return `<option value="${i}" ${i === activeIdx ? 'selected' : ''}>${name}</option>`;
+        }).join('');
+        bar.classList.remove('hidden');
+    }
+
+    function hideProviderBar() {
+        const bar = document.getElementById('movie-provider-bar');
+        if (bar) bar.classList.add('hidden');
+    }
+
+    // ─── Launch a movie via the existing Scramjet pipeline ───
+    // Reuses launchGame's setup but tags the session as a movie so the
+    // exit button knows to return to view-movies instead of view-games.
+    function playMovie(movie, providerIdx = 0) {
+        const all = [movie.url, ...(movie.fallbacks || [])];
+        const url = all[providerIdx] || all[0];
+        if (!url) return;
+        currentMovie = movie;
+        window._isMovieSession = true;
+        if (typeof window.launchGame === 'function') {
+            window.launchGame(url);
+            // After Scramjet builds the frame, harden it: deny popups + top navigation.
+            // This blocks the most common adware vector ("open ad in new tab/window").
+            // We don't add allow-popups so the iframe physically cannot window.open.
+            // NB: this is best-effort — third-party embeds can still inject overlays
+            // INSIDE the iframe. Real ad-blocking requires a browser extension.
+            setTimeout(() => {
+                const frame = document.getElementById('sj-frame');
+                if (frame) {
+                    frame.setAttribute(
+                        'sandbox',
+                        'allow-scripts allow-same-origin allow-forms allow-presentation allow-orientation-lock'
+                    );
+                }
+                showProviderBar(movie, providerIdx);
+            }, 400);
+        } else {
+            console.error('[Movies] launchGame is not available');
+        }
+    }
+    window.playMovie = playMovie; // exposed for debugging
+
+    // ─── Patch: when exiting a movie session, route to view-movies (not view-games) ───
+    // The original btnHome handler always calls switchView("view-games") via lexical-
+    // scoped lookup, so monkey-patching window.switchView misses it. Instead we attach
+    // an additional click listener on btnHome that runs AFTER the original one and
+    // redirects when the session was a movie. addEventListener fires in attach order.
+    function attachExitHook() {
+        const btn = document.getElementById('nav-home');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            if (window._isMovieSession) {
+                window._isMovieSession = false;
+                hideProviderBar();
+                // Original handler already switched to view-games — bounce to movies.
+                if (typeof window.switchView === 'function') window.switchView('view-movies');
+            } else {
+                hideProviderBar(); // not a movie session, but still hide bar
+            }
+        });
+    }
+    attachExitHook();
+
+    // ─── Render ───
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    function buildCard(movie) {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        const poster = movie.img || '';
+        const year = movie.year || '';
+        const rating = (movie.rating || 0).toFixed(1);
+        card.innerHTML = `
+            <div class="mc-poster" ${poster ? `style="background-image: url('${escapeHtml(poster)}');"` : ''}></div>
+            <div class="mc-overlay"></div>
+            <div class="mc-info">
+                <h3 class="mc-title">${escapeHtml(movie.name)}</h3>
+                <div class="mc-meta">
+                    ${year ? `<span>${year}</span>` : ''}
+                    ${rating > 0 ? `<span class="mc-rating">★ ${rating}</span>` : ''}
+                </div>
+                <span class="mc-play">▶ Play</span>
+            </div>
+        `;
+        const handler = () => playMovie(movie, 0);
+        card.addEventListener('click', handler);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
+        });
+        return card;
+    }
+
+    function renderGrid(list) {
+        grid.innerHTML = '';
+        if (!list.length) {
+            grid.innerHTML = `
+                <div class="mc-empty">
+                    <h3>No movies match your search</h3>
+                    <p>Try a different title, or browse the full catalog.</p>
+                </div>
+            `;
+            return;
+        }
+        // Render in chunks so 1000+ movies don't lock up the main thread
+        const CHUNK = 60;
+        let i = 0;
+        function nextChunk() {
+            const frag = document.createDocumentFragment();
+            const end = Math.min(i + CHUNK, list.length);
+            for (; i < end; i++) frag.appendChild(buildCard(list[i]));
+            grid.appendChild(frag);
+            if (i < list.length) requestAnimationFrame(nextChunk);
+        }
+        nextChunk();
+    }
+
+    function applyFilter() {
+        const term = (_lastSearchTerm || '').trim().toLowerCase();
+        if (!term) { renderGrid(catalog); return; }
+        const filtered = catalog.filter(m =>
+            (m.name || '').toLowerCase().includes(term) ||
+            String(m.year || '').includes(term)
+        );
+        renderGrid(filtered);
+    }
+
+    if (searchEl) {
+        searchEl.addEventListener('input', (e) => {
+            _lastSearchTerm = e.target.value;
+            clearTimeout(_searchTimer);
+            _searchTimer = setTimeout(applyFilter, 150);
+        });
+    }
+
+    // ─── Load catalog ───
+    async function loadCatalog() {
+        try {
+            const res = await fetch('/movies.json', { cache: 'force-cache' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            catalog = await res.json();
+            if (!Array.isArray(catalog) || !catalog.length) throw new Error('empty catalog');
+            renderGrid(catalog);
+            console.log(`[Movies] Loaded ${catalog.length} titles`);
+        } catch (err) {
+            console.warn('[Movies] catalog load failed:', err);
+            grid.innerHTML = `
+                <div class="mc-empty">
+                    <h3>Movie catalog not available yet</h3>
+                    <p>Run <code>python3 scrape_movies.py</code> in the repo root to generate <code>public/movies.json</code>, then refresh this page.</p>
+                </div>
+            `;
+        }
+    }
+
+    // Lazy-load on first navigation to view-movies (don't ship 500KB JSON on every pageload)
+    let _loaded = false;
+    const trigger = () => {
+        if (_loaded) return;
+        _loaded = true;
+        loadCatalog();
+    };
+    document.querySelectorAll('[data-target="view-movies"]').forEach(btn => {
+        btn.addEventListener('click', trigger);
+    });
+    // Also if anything else routes us in (carousel card, deep link)
+    document.addEventListener('click', (e) => {
+        const t = e.target.closest('[onclick*="view-movies"]');
+        if (t) trigger();
+    }, true);
+})();
+
+// ==========================================
+// 9. v1.5.5 — PLAYER CONTROL BAR
+//    Floating glass bar at top of view-proxy. Refresh / Fullscreen / Exit.
+//    Auto-fades when idle so it doesn't cover content during playback.
+//    Exit is the same #nav-home element the original code already wired,
+//    so we don't touch its click handler — just style and re-position it.
+// ==========================================
+(function setupPlayerControls() {
+    const bar  = document.getElementById('player-controls');
+    if (!bar) return;
+    const refreshBtn    = document.getElementById('pc-refresh');
+    const fullscreenBtn = document.getElementById('pc-fullscreen');
+    const proxyView    = document.getElementById('view-proxy');
+
+    // Refresh — reload the iframe by setting src to itself
+    refreshBtn?.addEventListener('click', () => {
+        const frame = document.getElementById('sj-frame');
+        if (!frame) return;
+        // Scramjet wraps the frame; the simplest reload is to re-issue go() on
+        // the current location. Fallback: set src to itself.
+        try {
+            if (window.currentFrame && typeof window.currentFrame.go === 'function') {
+                const cur = frame.contentWindow?.location?.href || frame.src;
+                window.currentFrame.go(cur);
+            } else if (frame.contentWindow) {
+                frame.contentWindow.location.reload();
+            } else {
+                frame.src = frame.src;
+            }
+        } catch (e) {
+            try { frame.src = frame.src; } catch (_) {}
+        }
+    });
+
+    // Fullscreen toggle — request on the proxy view container so controls also
+    // go fullscreen, not just the iframe. Most browsers allow exiting via Esc.
+    function toggleFullscreen() {
+        const target = proxyView;
+        if (!document.fullscreenElement) {
+            (target.requestFullscreen ||
+             target.webkitRequestFullscreen ||
+             target.msRequestFullscreen)?.call(target);
+            fullscreenBtn.textContent = '⛶';
+            fullscreenBtn.title = 'Exit fullscreen';
+        } else {
+            (document.exitFullscreen ||
+             document.webkitExitFullscreen ||
+             document.msExitFullscreen)?.call(document);
+            fullscreenBtn.title = 'Fullscreen';
+        }
+    }
+    fullscreenBtn?.addEventListener('click', toggleFullscreen);
+
+    // Update title text when entering/leaving fullscreen via Esc / browser UI
+    document.addEventListener('fullscreenchange', () => {
+        fullscreenBtn.title = document.fullscreenElement ? 'Exit fullscreen' : 'Fullscreen';
+    });
+
+    // ─── Auto-hide when idle (mouse hasn't moved for 2.5s over the proxy view) ───
+    let idleTimer = null;
+    function showBar() {
+        bar.classList.remove('idle');
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => bar.classList.add('idle'), 2500);
+    }
+    function onMove() { showBar(); }
+    proxyView?.addEventListener('mousemove', onMove);
+    proxyView?.addEventListener('touchstart', onMove, { passive: true });
+    // Don't auto-hide if the user is hovering the bar itself
+    bar.addEventListener('mouseenter', () => { clearTimeout(idleTimer); bar.classList.remove('idle'); });
+    bar.addEventListener('mouseleave', () => { idleTimer = setTimeout(() => bar.classList.add('idle'), 1500); });
+
+    // Start idle by default — bar surfaces on first mouse move
+    bar.classList.add('idle');
+})();
+
+// ==========================================
+// 10. v1.5.5 — SOFT POPUP BLOCKER
+//     Best-effort: catch window.open calls during movie sessions and refuse them.
+//     Won't catch popups originating from inside a Scramjet iframe (different
+//     window object), but does catch the parent-level redirect attempts that
+//     some embeds trigger via injected scripts.
+// ==========================================
+(function softPopupBlocker() {
+    const origOpen = window.open.bind(window);
+    let blockedCount = 0;
+    window.open = function(url, target, features) {
+        if (window._isMovieSession) {
+            blockedCount++;
+            console.log(`[Chroblox] Blocked popup from embed (${blockedCount} total):`, url);
+            return null;
+        }
+        return origOpen(url, target, features);
+    };
+})();
+
+// ==========================================
+// 11. v1.5.6 — CACHE MIGRATION (1.4.0 → 1.5.0)
+//     Stale localStorage / service-worker cache from v1.4 can serve old assets
+//     and break the redesign. On first v1.5 boot, clear stale entries and
+//     unregister any v1.4 service workers so they re-fetch fresh.
+//     Runs synchronously at the top of boot, before anything else paints.
+// ==========================================
+(function migrateFrom14() {
+    const VERSION = '1.5.0';
+    const stored  = localStorage.getItem('chroblox-version');
+    if (stored === VERSION) return;
+
+    console.log(`[Chroblox] Migrating ${stored || 'pre-1.5'} → ${VERSION}`);
+
+    // Stale 1.4 keys — prune so they don't leak old state
+    const STALE_KEYS = [
+        'chroblox-v1.4-seen',  // old update overlay flag (we use 1.5 now)
+        'cherri-cards-cache',  // old launchpad cache key, if any
+        'launchpad-state',     // any persisted launch view state
+    ];
+    STALE_KEYS.forEach(k => { try { localStorage.removeItem(k); } catch (_) {} });
+
+    // Re-register service workers from scratch — old SW may cache old CSS/JS
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            regs.forEach(r => {
+                console.log('[Chroblox] Unregistering old SW:', r.scope);
+                r.unregister();
+            });
+        }).catch(() => {});
+    }
+
+    // Bust the browser HTTP cache for app assets on this load
+    if (window.caches && caches.keys) {
+        caches.keys().then(names => {
+            names.forEach(n => caches.delete(n));
+        }).catch(() => {});
+    }
+
+    localStorage.setItem('chroblox-version', VERSION);
+
+    // If we came from 1.4 (had the seen flag), force one hard reload so the
+    // browser pulls fresh CSS/JS instead of using disk cache. Use a flag so
+    // we don't get a reload loop if the storage write somehow fails.
+    if (stored && stored.startsWith('1.4') && !sessionStorage.getItem('chroblox-migrated')) {
+        sessionStorage.setItem('chroblox-migrated', '1');
+        setTimeout(() => location.reload(), 50);
+    }
+})();
+
+// ==========================================
+// 12. v1.5.6 — DOCUMENT TITLE SPOOF DURING BOOT
+//     Browser tab title shows an educational name during boot. After boot
+//     completes, restores whatever cloak title the user has selected
+//     (Settings → Cloak), or "Chroblox | Workspace v1.5" by default.
+// ==========================================
+(function spoofTitleDuringBoot() {
+    const original = document.title;
+    document.title = 'Calculus 101 — Study Notes';
+    setTimeout(() => {
+        // Don't clobber if the user has a saved cloak title from settings
+        const cloak = localStorage.getItem('cloakTitle');
+        document.title = cloak || original;
+    }, 4200);
+})();
+
+// ==========================================
+// 13. v1.5.6 — BROWSER VIEWPORT LOADER
+//     Show "IGNITING..." in the browser tab area while a URL loads. Mirrors
+//     the proxy-loader pattern. Wires into the existing loadUrlInBrowserTab
+//     flow without modifying it — uses MutationObserver on the iframe class
+//     (Scramjet flips it from "browser-iframe hidden" → "browser-iframe" on load).
+// ==========================================
+(function browserLoader() {
+    const loader = document.getElementById('browser-loader');
+    if (!loader) return;
+
+    function show() { loader.classList.remove('hidden'); }
+    function hide() { loader.classList.add('hidden'); }
+
+    // Show whenever a URL is submitted; hide whenever an iframe is no longer hidden
+    const urlForm = document.getElementById('browser-url-form');
+    if (urlForm) urlForm.addEventListener('submit', show);
+
+    // The "+" new-tab button shouldn't trigger the loader (it just creates a blank tab)
+    // but typing a URL into the bar will via the form submit above.
+
+    // Watch the viewport for iframe class changes — when an iframe loses .hidden,
+    // hide the loader (means the page mounted)
+    const viewport = document.getElementById('browser-viewport');
+    if (viewport && 'MutationObserver' in window) {
+        const obs = new MutationObserver(muts => {
+            for (const m of muts) {
+                if (m.type === 'attributes' && m.target.tagName === 'IFRAME') {
+                    if (!m.target.classList.contains('hidden')) {
+                        // iframe just became visible — page is up
+                        hide();
+                    }
+                }
+                // Also hide when a new iframe finishes loading
+                if (m.type === 'childList') {
+                    m.addedNodes.forEach(n => {
+                        if (n.tagName === 'IFRAME') {
+                            n.addEventListener('load', hide, { once: true });
+                        }
+                    });
+                }
+            }
+        });
+        obs.observe(viewport, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+
+    // Safety net: hide after 12s no matter what (don't strand the user behind a loader)
+    let safetyTimer = null;
+    const origShow = show;
+    show = function() {
+        origShow();
+        clearTimeout(safetyTimer);
+        safetyTimer = setTimeout(hide, 12000);
+    };
+})();
