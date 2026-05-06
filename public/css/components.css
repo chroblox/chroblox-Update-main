@@ -40,7 +40,7 @@
 .soon-pip { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; font-size: 0.55rem; font-weight: 900; padding: 2px 6px; border-radius: 8px; margin-left: auto; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4); }
 
 /* ───────── TYPOGRAPHY & HEADER ───────── */
-.hub-title { font-family: 'Archivo Black', 'Space Grotesk', sans-serif !important; font-weight: 900 !important; font-size: clamp(2.2rem, 7vw, 5.0rem) !important; letter-spacing: -2.5px !important; line-height: 0.95 !important; margin: auto 0 24px 0 !important; color: #ffffff !important; text-align: center; user-select: none; background: none !important; -webkit-text-fill-color: #ffffff !important; text-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 4px 14px rgba(0,0,0,0.45) !important; }
+.hub-title { font-family: 'Archivo Black', 'Space Grotesk', sans-serif !important; font-weight: 900 !important; font-size: clamp(2.2rem, 7vw, 5.0rem) !important; letter-spacing: -2.5px !important; line-height: 0.95 !important; margin: 0 0 24px 0 !important; color: #ffffff !important; text-align: center; user-select: none; background: none !important; -webkit-text-fill-color: #ffffff !important; text-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 4px 14px rgba(0,0,0,0.45) !important; }
 .hub-title .ac { color: var(--ac) !important; -webkit-text-fill-color: var(--ac) !important; background: none !important; text-shadow: 0 0 18px var(--ag), 0 0 38px var(--ag), 0 2px 0 rgba(0,0,0,0.4), 0 4px 14px rgba(0,0,0,0.45) !important; }
 [data-mode="light"] .hub-title { color: #1a1a2e !important; -webkit-text-fill-color: #1a1a2e !important; text-shadow: 0 2px 0 rgba(0,0,0,0.15), 0 4px 14px rgba(0,0,0,0.15) !important; }
 [data-mode="light"] .hub-title .ac { color: var(--ac) !important; -webkit-text-fill-color: var(--ac) !important; }
@@ -57,12 +57,15 @@
 .hub-search .launch-btn { background: var(--ac); border: 1px solid rgba(255,255,255,0.15); color: white; font-weight: 800; font-size: clamp(0.82rem, 1.3vw, 0.95rem); padding: 0 clamp(20px, 3vw, 32px); border-radius: 16px; cursor: pointer; letter-spacing: 1px; transition: 0.2s; box-shadow: 0 8px 24px rgba(255,71,87,0.3); }
 .hub-search .launch-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
+.game-search { display: flex; align-items: center; gap: 10px; background: rgba(var(--surface-rgb), 0.6); border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px; width: 100%; max-width: 300px; transition: 0.3s; }
+.game-search:focus-within { border-color: var(--ac); background: var(--surface-solid); }
+.game-search input { background: transparent; border: none; outline: none; color: var(--text); font-family: inherit; font-size: 1rem; width: 100%; }
+.search-icon { font-size: 1.2rem; filter: grayscale(0.2); }
+
 /* ───────── CARDS, DOCKS & CAROUSELS ───────── */
 .hub-dock { display: flex; gap: clamp(6px, 1vw, 12px); justify-content: center; flex-wrap: wrap; max-width: 100%; box-sizing: border-box; }
 .dock-card { width: clamp(64px, 11vw, 96px); height: clamp(64px, 11vw, 96px); border-radius: clamp(14px, 2vw, 20px); }
-.dock-card .app-icon { width: clamp(24px, 4vw, 36px); height: clamp(24px, 4vw, 36px); margin-bottom: 6px; }
-
-.app-card { background: var(--glass-fill); background-image: var(--glass-sheen); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-bord); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1); cursor: pointer; box-shadow: 0 8px 28px rgba(0,0,0,0.25); color: var(--text); position: relative; overflow: hidden; }
+.app-card { background: var(--glass-fill); background-image: var(--glass-sheen); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-bord); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1); cursor: pointer; box-shadow: 0 8px 28px rgba(0,0,0,0.25); padding: 0; color: var(--text); font-family: inherit; position: relative; overflow: hidden; }
 .app-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 110%, var(--brand, transparent), transparent 65%); opacity: 0.35; transition: opacity 0.35s; pointer-events: none; }
 .app-card:hover { border-color: var(--brand, var(--ac)); transform: translateY(-4px) scale(1.04); box-shadow: 0 18px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--brand, var(--ac)), 0 0 30px var(--brand, rgba(255,71,87,0.4)); z-index: 60; }
 .app-card:hover::before { opacity: 0.7; }
@@ -74,7 +77,7 @@
 .carousel-wrap { position: relative; width: 100%; max-width: 100%; box-sizing: border-box; flex-shrink: 0; height: clamp(160px, 22vh, 220px); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent); mask-image: linear-gradient(90deg, transparent, #000 60px, #000 calc(100% - 60px), transparent); margin-top: auto; }
 .carousel-track { display: flex; gap: 14px; height: 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; padding: 4px 0; }
 .carousel-skeleton { color: var(--text-muted); font-size: 0.85rem; padding: 60px 30px; align-self: center; margin: auto; }
-.carousel-card { flex: 0 0 clamp(150px, 17vw, 200px); height: 100%; border-radius: 18px; background: var(--glass-fill); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-bord); position: relative; overflow: hidden; cursor: pointer; box-shadow: 0 12px 30px rgba(0,0,0,0.3); transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; }
+.carousel-card { flex: 0 0 clamp(150px, 17vw, 200px); height: 100%; max-height: 100%; border-radius: 18px; background: var(--glass-fill); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-bord); position: relative; overflow: hidden; cursor: pointer; box-shadow: 0 12px 30px rgba(0,0,0,0.3); transition: transform 0.3s cubic-bezier(0.2,0.9,0.3,1.2), box-shadow 0.3s, border-color 0.3s; padding: 0; text-align: left; color: var(--text); font-family: inherit; }
 .carousel-card .cc-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.6s; }
 .carousel-card .cc-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.85) 100%); }
 .carousel-card .cc-shine { position: absolute; top: 0; left: 0; right: 0; height: 50%; background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent); pointer-events: none; opacity: 0.7; z-index: 2; }
@@ -183,7 +186,6 @@
 @keyframes loader-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
 /* ───────── BANNERS & MODALS ───────── */
-/* Restored body blur when adblock modal is triggered */
 body.adblock-locked { overflow: hidden !important; }
 body.adblock-locked #home-ui, body.adblock-locked #boot-screen, body.adblock-locked #stealth-controls, body.adblock-locked #update-overlay, body.adblock-locked #player-controls { pointer-events: none !important; user-select: none !important; filter: blur(8px) brightness(0.55); }
 body.adblock-locked #sj-frame, body.adblock-locked .browser-iframe { visibility: hidden !important; opacity: 0 !important; }
@@ -211,7 +213,7 @@ body.adblock-locked #sj-frame, body.adblock-locked .browser-iframe { visibility:
 #close-ad-top-btn { bottom: -15px; } 
 #close-ad-bottom-btn { top: -15px; }
 
-/* ───────── BOOT SCREEN & DECOY (RESTORED) ───────── */
+/* ───────── BOOT SCREEN & DECOY ───────── */
 .boot-screen { position: fixed; inset: 0; z-index: 99998; background: #ffffff; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease; overflow-y: auto; }
 .boot-screen.fade-out { opacity: 0; pointer-events: none; }
 .boot-screen.hidden { display: none !important; }
