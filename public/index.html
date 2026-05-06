@@ -171,7 +171,7 @@
             <div class="sidebar-inner">
                 <div class="brand">
                     <img src="assets/sj.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                    <div class="bmark hidden-logo">C</div>
+                    <div class="bmark" style="display:none;">C</div>
                     <h2 class="sidebar-text title-reset">CHRO<span class="ac">BLOX</span></h2>
                 </div>
                 <nav class="nav-menu" id="main-nav">
@@ -275,7 +275,7 @@
             </section>
 
             <!-- PAGE: APP VAULT (GAMES) -->
-            <section id="view-games" class="view-section hidden vault-padding">
+            <section id="view-games" class="view-section hidden">
                 <div class="page-header" id="vault-header">
                     <div>
                         <h2>App Vault</h2>
@@ -290,7 +290,7 @@
                     <p class="text-muted">Syncing catalog...</p>
                 </div>
                 
-                <div class="request-games-banner" style="margin-top: 50px; width: 100%; max-width: 1000px; background: rgba(var(--surface-rgb), 0.6); border: 1px solid var(--border); border-radius: 20px; padding: 35px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box;">
+                <div class="request-games-banner" style="margin-top: 50px; width: 100%; max-width: 1000px; background: rgba(var(--surface-rgb), 0.6); border: 1px solid var(--border); border-radius: 20px; padding: 35px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box; flex-shrink: 0;">
                     <h3 style="margin: 0 0 10px 0; font-size: 1.8rem; font-family: 'Space Grotesk', sans-serif;">More coming soon...</h3>
                     <p style="color: var(--text-muted); margin: 0 0 25px 0; font-size: 1.05rem;">Have a game you really want to play? Request it directly in our community!</p>
                     <button class="launch-btn" style="padding: 14px 35px; font-size: 1rem; border-radius: 14px; background: #5865F2; color: #fff; box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);" onclick="window.open('https://discord.gg/AbrmZFwppU', '_blank')">
@@ -339,7 +339,7 @@
             </section>
             
             <!-- PAGE: PROXY IFRAME -->
-            <section id="view-proxy" class="view-section hidden proxy-padding">
+            <section id="view-proxy" class="view-section hidden">
                 <div id="player-controls" class="player-controls">
                     <button class="pc-btn" id="pc-refresh" title="Reload">⟳</button>
                     <button class="pc-btn" id="pc-fullscreen" title="Fullscreen">⛶</button>
@@ -387,7 +387,7 @@
             </section>
 
             <!-- PAGE: SETTINGS -->
-            <section id="view-settings" class="view-section hidden settings-padding">
+            <section id="view-settings" class="view-section hidden">
                 <div class="page-header">
                     <h2>System Settings</h2>
                     <p>Customize your workspace appearance and privacy controls.</p>
@@ -458,7 +458,7 @@
             </section>
 
             <!-- PAGE: PRIVACY -->
-            <section id="view-privacy" class="view-section hidden" style="padding: 60px;">
+            <section id="view-privacy" class="view-section hidden">
                 <div class="legal-page" style="max-width: 760px; width: 100%;">
                     <button class="legal-back-btn" onclick="switchView('view-settings')">← Back to Settings</button>
                     <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:900; margin: 20px 0 5px;">Privacy <span class="ac">Policy</span></h2>
@@ -499,7 +499,7 @@
             </section>
 
             <!-- PAGE: TOS -->
-            <section id="view-tos" class="view-section hidden" style="padding: 60px;">
+            <section id="view-tos" class="view-section hidden">
                 <div class="legal-page" style="max-width: 760px; width: 100%;">
                     <button class="legal-back-btn" onclick="switchView('view-settings')">← Back to Settings</button>
                     <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:900; margin: 20px 0 5px;">Terms of <span class="ac">Service</span></h2>
@@ -540,7 +540,7 @@
             </section>
 
             <!-- PAGE: DMCA -->
-            <section id="view-dmca" class="view-section hidden" style="padding: 60px;">
+            <section id="view-dmca" class="view-section hidden">
                 <div class="legal-page" style="max-width: 760px; width: 100%;">
                     <button class="legal-back-btn" onclick="switchView('view-settings')">← Back to Settings</button>
                     <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2.4rem; font-weight:900; margin: 20px 0 5px;">DMCA <span class="ac">Policy</span></h2>
@@ -568,11 +568,11 @@
     </div>
     
     <!-- MODULAR JS IMPORTS -->
-    <script src="js/app.js?v=1.5.1.1"></script>
-    <script src="js/catalog.js?v=1.5.1.1"></script>
-    <script src="js/proxy.js?v=1.5.1.1"></script>
-    <script src="js/monetization.js?v=1.5.1.1"></script>
-    <script src="js/background.js?v=1.5.1.1"></script>
-    <script src="register-sw.js?v=1.5.1.1"></script>
+    <script src="js/app.js?v=1.5.1.5"></script>
+    <script src="js/catalog.js?v=1.5.1.5"></script>
+    <script src="js/proxy.js?v=1.5.1.5"></script>
+    <script src="js/monetization.js?v=1.5.1.5"></script>
+    <script src="js/background.js?v=1.5.1.5"></script>
+    <script src="register-sw.js?v=1.5.1.5"></script>
 </body>
 </html>

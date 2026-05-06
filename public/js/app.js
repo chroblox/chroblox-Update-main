@@ -53,7 +53,7 @@ navButtons.forEach(btn => {
 // --- CLOAKING ---
 window.handleCloak = function(type) {
     let title = "Chroblox | Workspace v1.5";
-    let icon = "favicon.ico";
+    let icon = "assets/favicon.ico";
 
     if (type === 'drive') {
         title = "My Drive - Google Drive";
@@ -177,6 +177,83 @@ document.addEventListener('click', (e) => {
     if (tTog && !tTog.contains(e.target) && tm) tm.classList.add('hidden');
     if (stealthBtn && !stealthBtn.contains(e.target) && sm) sm.classList.add('hidden');
 });
+
+// ==========================================
+// BOOT SEQUENCE & SPOOFING
+// ==========================================
+(function spoofTitleDuringBoot() {
+    const original = document.title;
+    document.title = 'Calculus 101 — Study Notes';
+    setTimeout(() => {
+        const cloak = localStorage.getItem('cloakTitle');
+        document.title = cloak || original;
+    }, 3500);
+})();
+
+(function bootSequence() {
+    const screen     = document.getElementById('boot-screen');
+    if (!screen) return;
+    const decoy      = document.getElementById('boot-decoy');
+    const nameReveal = document.getElementById('boot-name');
+    const eduName    = document.getElementById('boot-edu-name');
+    const chroName   = document.getElementById('boot-chro-name');
+    const ws         = document.getElementById('home-ui');
+    const sc         = document.getElementById('stealth-controls');
+
+    if (ws) ws.classList.add('boot-fade');
+    if (sc) sc.classList.add('boot-hidden');
+
+    setTimeout(() => {
+        if (decoy) decoy.classList.add('hidden');
+        if (nameReveal) nameReveal.classList.add('show');
+
+        setTimeout(() => {
+            if (eduName)  eduName.classList.add('fade-out');
+            setTimeout(() => {
+                if (eduName)  eduName.style.display = 'none';
+                if (chroName) chroName.classList.add('show');
+            }, 200);
+
+            setTimeout(() => {
+                if (screen) screen.classList.add('fade-out');
+                if (ws)     ws.classList.remove('boot-fade');
+                if (sc)     sc.classList.remove('boot-hidden');
+                setTimeout(() => { if (screen) screen.classList.add('hidden'); }, 400);
+            }, 500);
+        }, 500);
+    }, 2500);
+})();
+
+// ==========================================
+// AI WORKSPACE STUB
+// ==========================================
+(function setupAI() {
+    const form    = document.getElementById('ai-form');
+    const input   = document.getElementById('ai-input');
+    const history = document.getElementById('ai-history');
+    if (!form || !input || !history) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = input.value.trim();
+        if (!val) return;
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'ai-msg user';
+        userMsg.textContent = val;
+        history.appendChild(userMsg);
+        input.value = '';
+        history.scrollTop = history.scrollHeight;
+
+        setTimeout(() => {
+            const sysMsg = document.createElement('div');
+            sysMsg.className = 'ai-msg system';
+            sysMsg.textContent = '⚡ AI update in progress — full conversational mode coming soon as a pending v1.5 update.';
+            history.appendChild(sysMsg);
+            history.scrollTop = history.scrollHeight;
+        }, 500);
+    });
+})();
 
 // --- BOOT EVENT LISTENER ---
 document.addEventListener("DOMContentLoaded", async () => {
