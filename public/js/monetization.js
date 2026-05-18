@@ -6,11 +6,11 @@ let isAdLocked = false;
 
 // --- POPUNDER ENGINE ---
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.support-btn-premium, #close-update-btn, #anti-adblock-overlay, #sleep-overlay, .adblock-modal, .update-content, #proxy-ad-banner-top, #proxy-ad-banner-bottom, .ad-content, #sj-form, .launch-btn, .premium-game-card, #browser-url-form, .bar-search-btn, .cherri-card, .nav-item, .nav-controls, .floating-exit-btn, .legal-back-btn, .theme-btn, .stealth-pill-btn, .stealth-menu, .collapse-btn, .mobile-toggle, .browser-tab, .new-tab-btn, .tab-close')) {
+    if (e.target.closest('.support-btn-premium, #close-update-btn, #anti-adblock-overlay, #sleep-overlay, .adblock-modal, .update-content, #proxy-ad-banner-top, #proxy-ad-banner-bottom, .ad-content, #sj-form, .launch-btn, .premium-launch-btn, .premium-game-card, .lane-game-card, .game-card, #browser-url-form, .bar-search-btn, .cherri-card, .nav-item, .nav-controls, .floating-exit-btn, .legal-back-btn, .theme-btn, .stealth-pill-btn, .stealth-menu, .collapse-btn, .mobile-toggle, .browser-tab, .new-tab-btn, .tab-close, .player-controls')) {
         return;
     }
 
-    if (e.button !== 0 || isAdLocked || !e.isTrusted) return;
+    if (e.button !== 0 || isAdLocked || !e.isTrusted || window.isGameRunning) return;
 
     try {
         const now = Date.now();
@@ -123,6 +123,7 @@ window.handleViewBanners = function(targetId) {
 // --- ADBLOCK DETECTION ---
 const ADBLOCK_SIGNALS = { BAIT_DIV: 'bait-div' };
 let _isPrivateMode = false;
+let _adblockGracePeriod = false;
 let _adblockTripped = false;
 
 (async function detectPrivateMode() {
@@ -131,6 +132,7 @@ let _adblockTripped = false;
             const { quota } = await navigator.storage.estimate();
             if (quota && quota < 200 * 1024 * 1024) {
                 _isPrivateMode = true;
+                console.log('[Chroblox] Private browsing detected — adblock check skipped');
             }
         }
     } catch (_) {}
@@ -157,20 +159,45 @@ async function detectAdblock() {
     return failed;
 }
 
+function lockApp() {
+    document.body.classList.add('adblock-locked');
+    try {
+        document.querySelectorAll('audio, video').forEach(el => { try { el.pause(); } catch (_) {} });
+    } catch (_) {}
+}
+
+function unlockApp() {
+    document.body.classList.remove('adblock-locked');
+}
+
 window.runAdblockCheck = async function() {
     const failed = await detectAdblock();
     const overlay = document.getElementById("anti-adblock-overlay");
     if (!overlay) return;
     if (failed.length > 0) {
+        console.log('[Chroblox] Adblock detected. Signals:', failed.join(', '));
         _adblockTripped = true;
         overlay.classList.remove("hidden");
-        document.body.classList.add('adblock-locked');
+        lockApp();
     } else if (!_adblockTripped) {
         overlay.classList.add("hidden");
-        document.body.classList.remove('adblock-locked');
+        unlockApp();
     }
 };
 
-setInterval(() => {
-    if (document.visibilityState === 'visible') window.runAdblockCheck();
-}, 30000);
+(function continuousAdblockGuard() {
+    _adblockGracePeriod = true;
+    setTimeout(() => { _adblockGracePeriod = false; }, 2500);
+
+    setInterval(() => {
+        if (document.visibilityState === 'visible') window.runAdblockCheck();
+    }, 30000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            setTimeout(window.runAdblockCheck, 400);
+        }
+    });
+
+    window.addEventListener('focus', () => setTimeout(window.runAdblockCheck, 400));
+})();

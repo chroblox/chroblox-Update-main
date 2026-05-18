@@ -30,7 +30,7 @@ window.loadGameCatalog = async function() {
 
             card.innerHTML = `
                 <div class="game-banner" style="background-image: url('${game.img}');"></div>
-                <div class="game-details" style="padding-bottom: 25px;">
+                <div class="game-details">
                     <h3>${game.name}</h3>
                 </div>
             `;

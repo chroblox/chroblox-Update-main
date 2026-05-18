@@ -1,97 +1,224 @@
-/* ───────── BODY + WORKSPACE LAYOUT ───────── */
-.webos-container { display: flex; height: 100vh !important; width: 100vw; max-width: 100%; position: relative; z-index: 10; padding: 8px 0 8px 8px !important; gap: 0 !important; box-sizing: border-box; }
-.workspace { flex-grow: 1; display: flex; flex-direction: column; background: transparent; position: relative; overflow: hidden !important; height: calc(100vh - 16px) !important; width: 100%; border-radius: 0 !important; }
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT.CSS — Pure viewport-proportional layout
+   ALL sizes in vmin / vw / vh  →  same proportions on every screen
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ───────── SIDEBAR ───────── */
-.sidebar { width: 18vw; background: rgba(20, 24, 32, 0.55) !important; backdrop-filter: blur(22px) saturate(160%) !important; -webkit-backdrop-filter: blur(22px) saturate(160%) !important; border: 1px solid var(--glass-bord) !important; border-radius: 1.2vw !important; position: relative; flex-shrink: 0; z-index: 20; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important; height: calc(100vh - 16px) !important; margin: 0 0.5vw 0 0 !important; overflow: visible !important; }
-[data-mode="light"] .sidebar { background: rgba(255, 255, 255, 0.55) !important; border-color: rgba(0, 0, 0, 0.08) !important; }
-.sidebar-inner { width: 100%; height: 100%; padding: 3vh 1vw; box-sizing: border-box; display: flex; flex-direction: column; border-radius: inherit; overflow-y: auto; }
-.sidebar.collapsed { width: 5.5vw; }
-.sidebar.collapsed .sidebar-inner { padding: 3vh 0.5vw; }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+
+/* ── Root container ── */
+.webos-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  padding: 1vmin 0 1vmin 1vmin;
+  gap: 0;
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Workspace ── */
+.workspace {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  height: 98vh;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR
+   ═══════════════════════════════════════════════════════════════ */
+.sidebar {
+  width: 18vw;
+  min-width: 180px;
+  background: rgba(20,24,32,0.55) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+  border: 1px solid var(--glass-bord) !important;
+  border-radius: 1.5vmin !important;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 20;
+  transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.4) !important;
+  height: 98vh;
+  margin: 0 0.8vmin 0 0 !important;
+  overflow: visible !important;
+}
+[data-mode="light"] .sidebar { background: rgba(255,255,255,0.55) !important; border-color: rgba(0,0,0,0.08) !important; }
+
+.sidebar-inner {
+  width: 100%;
+  height: 100%;
+  padding: 3vmin 1.5vmin;
+  display: flex;
+  flex-direction: column;
+  border-radius: inherit;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.sidebar-inner::-webkit-scrollbar { display: none; }
+
+/* Collapsed state */
+.sidebar.collapsed { width: 7vmin; min-width: 7vmin; }
+.sidebar.collapsed .sidebar-inner { padding: 3vmin 0.8vmin; align-items: center; }
 .sidebar.collapsed .sidebar-text, .sidebar.collapsed .bmark { display: none !important; }
 .sidebar.collapsed .collapse-btn .chevron { transform: rotate(180deg); }
 .sidebar.collapsed .brand { padding-left: 0; justify-content: center; }
-.sidebar.collapsed .brand-logo { width: 2.8vw !important; height: 2.8vw !important; display: block !important; }
-.sidebar.collapsed .nav-item { justify-content: center; padding: 1.5vh 0; }
-.sidebar.collapsed .nav-item .icon { font-size: 1.5vw; margin: 0; }
+.sidebar.collapsed .brand-logo { width: 4vmin !important; height: 4vmin !important; }
+.sidebar.collapsed .nav-item { justify-content: center; padding: 1.5vmin 0; }
+.sidebar.collapsed .nav-item .icon { font-size: 2.5vmin; margin: 0; }
 .sidebar.collapsed .soon-pip { display: none; }
-.sidebar.collapsed .gd7-widget { padding: 1vh; background: transparent; border: none; box-shadow: none; }
-.sidebar.collapsed .yt-btn, .sidebar.collapsed .discord-btn { width: 3vw; height: 3vw; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 0.8vw; margin: 0 auto; box-sizing: border-box;}
+.sidebar.collapsed .gd7-widget { padding: 1vmin; background: transparent; border: none; box-shadow: none; }
+.sidebar.collapsed .yt-btn,
+.sidebar.collapsed .discord-btn { width: 5vmin; height: 5vmin; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 1.2vmin; margin: 0 auto; }
 .sidebar.collapsed .official-icon { margin: 0; }
 
-/* ───────── VIEW SECTIONS (FIXED CUTOFFS) ───────── */
-.view-section { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 1; transition: opacity 0.3s ease; z-index: 1; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; padding: 8vh 4vw 6vh 4vw; }
+.mobile-toggle { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   VIEW SECTIONS
+   ═══════════════════════════════════════════════════════════════ */
+.view-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5vmin 4vmin 4vmin;
+}
 .view-section.hidden { display: none !important; opacity: 0; }
 
-#view-launch.liquid-launch { padding: 0 !important; flex-direction: row !important; align-items: stretch !important; height: 100% !important; gap: 0; overflow: hidden; }
+#view-launch.liquid-launch {
+  padding: 0 !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  height: 100% !important;
+  gap: 0;
+  overflow: hidden;
+}
 
-.launch-main { flex: 1; width: 100%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 4vh 2vw; gap: 2vh; }
+.launch-main {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2vmin 2vmin 2vmin;
+  gap: 2vmin;
+}
 
-.core-hub { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; margin: 12vh auto auto auto; width: 100%; max-width: 95%; position: relative !important; z-index: 5; }
+.core-hub {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin: 10vh auto 0 auto;
+  width: max-content;
+  max-width: 92vw;
+  position: relative !important;
+  z-index: 5;
+}
 
-/* Flex-shrink safety on grids to stop squishing */
 .premium-games-grid, .settings-wrapper, .page-header, .carousel-wrap { flex-shrink: 0; }
 
-/* ───────── IFRAME & BROWSER CONTAINERS ───────── */
+/* ═══════════════════════════════════════════════════════════════
+   IFRAME / BROWSER
+   ═══════════════════════════════════════════════════════════════ */
 .browser-app { width: 100%; height: 100%; display: flex; flex-direction: column; background: var(--bg); }
 .proxy-frame-container { flex-grow: 1; width: 100%; height: 100%; position: relative; background: #000; }
-#sj-frame { border: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; background-color: #000; touch-action: auto; }
-
-#view-proxy { padding: 0 !important; margin: 0 !important; height: 100% !important; width: 100% !important; background: #0a0c10 !important; border-radius: 0 !important; }
-#view-browser { padding: 0 !important; margin: 0 !important; height: 100% !important; width: 100% !important; background: #0a0c10 !important; border-radius: 0 !important; }
+#sj-frame { border: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: #000; touch-action: auto; }
+#view-proxy  { padding: 0 !important; height: 100% !important; width: 100% !important; background: #0a0c10 !important; border-radius: 0 !important; }
+#view-browser { padding: 0 !important; height: 100% !important; width: 100% !important; background: #0a0c10 !important; border-radius: 0 !important; }
 #view-browser:not(.hidden) { display: flex !important; flex-direction: column !important; }
 .browser-viewport { flex: 1 !important; height: auto !important; width: 100% !important; margin: 0 !important; padding: 0 !important; position: relative !important; }
 .browser-iframe { width: 100% !important; height: 100% !important; border: 0 !important; display: block !important; }
 .browser-iframe.hidden { display: none !important; }
 
-/* ───────── RESPONSIVE BREAKPOINTS ───────── */
-@media (max-width: 1100px) {
-    .sidebar { width: 72px !important; border-radius: 22px !important; margin-right: 8px !important; }
-    .sidebar-inner { padding: 30px 10px; }
-    .launch-main { padding: 20px; gap: 16px; }
-    .sidebar .sidebar-text, .sidebar .gd7-widget, .sidebar .discord-widget, .sidebar .widget-title { display: none !important; }
-    .sidebar .nav-item { justify-content: center !important; padding: 14px 0 !important; margin: 2px 6px !important; border-radius: 14px !important; }
-    .sidebar .nav-item .icon { font-size: 1.4rem !important; margin: 0 !important; }
-    .sidebar .nav-item.active::after { display: none !important; }
-    .sidebar .brand { justify-content: center !important; padding-left: 0 !important; }
-    .sidebar .soon-pip { display: none !important; }
-    .launch-main { padding: clamp(15px, 3vh, 30px) 24px; }
-    .stealth-controls { gap: 6px !important; top: 14px !important; right: 14px !important; }
-    .stealth-pill-btn, .support-btn-premium { padding: 7px 12px !important; font-size: 0.82rem !important; }
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Portrait (iPad / iPhone)
+   Sidebar slides off-canvas, hamburger appears, hub re-centres
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-aspect-ratio: 1/1) {
+  .webos-container { padding: 0; }
+  .workspace { height: 100vh; }
+
+  .sidebar {
+    position: fixed !important;
+    left: -100% !important;
+    top: 0 !important;
+    height: 100vh !important;
+    width: 72vw !important;
+    min-width: unset !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 99999 !important;
+    transition: left 0.3s ease !important;
+    overflow-y: auto !important;
+  }
+  .sidebar.open { left: 0 !important; }
+  .sidebar-inner { padding: 10vmin 5vmin 5vmin; }
+  .sidebar .sidebar-text,
+  .sidebar .gd7-widget,
+  .sidebar .discord-widget,
+  .sidebar .widget-title { display: block !important; }
+  .sidebar .brand { justify-content: flex-start !important; padding-left: 2vmin !important; }
+  .sidebar .nav-item {
+    justify-content: flex-start !important;
+    padding: 3vmin 4vmin !important;
+    font-size: 4vmin !important;
+    gap: 3vmin !important;
+    border-radius: 2vmin !important;
+  }
+  .sidebar .nav-item .icon { font-size: 5vmin !important; }
+  .sidebar .soon-pip { display: inline-flex !important; }
+  .sidebar .collapse-btn { display: none !important; }
+
+  .mobile-toggle {
+    display: flex !important;
+    position: fixed;
+    top: 3vmin;
+    left: 3vmin;
+    z-index: 100000;
+    background: var(--surface-solid);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 2vmin;
+    padding: 2.5vmin 3.5vmin;
+    cursor: pointer;
+    font-size: 6vmin;
+    box-shadow: 0 0.5vmin 2vmin rgba(0,0,0,0.2);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .core-hub { margin: 20vmin auto 0 auto; }
+  .view-section { padding: 14vmin 5vmin 5vmin; }
+  .launch-main { padding: 3vmin; gap: 2vmin; }
 }
-@media (max-width: 900px) {
-    .webos-container { padding: 0 !important; }
-    .workspace { height: 100vh !important; max-height: 100vh !important; }
-    .sidebar { position: fixed !important; left: -100% !important; top: 0 !important; height: 100vh !important; width: 240px !important; margin: 0 !important; border-radius: 0 !important; z-index: 99999 !important; transition: left 0.3s ease !important; overflow-y: auto !important; }
-    .sidebar.open { left: 0 !important; padding-top: 60px !important; }
-    .sidebar .sidebar-text, .sidebar .gd7-widget, .sidebar .discord-widget, .sidebar .widget-title { display: block !important; }
-    .sidebar .brand { justify-content: flex-start !important; padding-left: 5px !important; }
-    .sidebar .nav-item { justify-content: flex-start !important; padding: 12px 18px !important; }
-    .sidebar .nav-item .icon { font-size: 1rem !important; margin-right: 8px !important; }
-    .sidebar .soon-pip { display: inline-flex !important; }
-    .collapse-btn { display: none !important; }
-    .mobile-toggle { display: block !important; }
-    .launch-main { padding: clamp(15px, 3vh, 30px) 18px; gap: 14px; }
-    .view-section { padding: 80px 20px 40px 20px !important; }
-    .core-hub { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; margin: 12vh auto auto auto; width: 100%; max-width: 95%; position: relative !important; z-index: 5; }
-    .stealth-controls { top: 14px !important; right: 14px !important; gap: 6px !important; max-width: calc(100vw - 80px) !important; flex-wrap: wrap !important; justify-content: flex-end !important; }
-    .stealth-pill-btn, .support-btn-premium { padding: 6px 10px !important; font-size: 0.78rem !important; }
-    .click-badge { font-size: 0.65rem !important; padding: 2px 6px !important; }
-    .heart-icon { font-size: 0.95rem !important; }
-}
-@media (max-width: 700px) {
-    .hub-search { flex-direction: column; gap: 8px; }
-    .hub-search input[type="text"], .hub-search .launch-btn { width: 100%; padding: 12px 16px; }
-    .hub-dock { gap: 6px; }
-    .player-controls { top: 8px; padding: 4px; }
-    .pc-btn { padding: 6px 9px; font-size: 0.74rem; }
-}
-@media (max-width: 500px) {
-    .launch-main { padding: clamp(10px, 2vh, 20px) 12px; gap: 10px; }
-    .core-hub { padding: 4px 0; margin: auto; }
-    .hub-title { margin-bottom: 16px !important; }
-    .carousel-wrap { height: 150px !important; }
-    .stealth-controls { top: 10px !important; right: 10px !important; gap: 4px !important; }
-    .stealth-pill-btn, .support-btn-premium { padding: 5px 8px !important; font-size: 0.72rem !important; gap: 5px !important; }
-    .click-badge { font-size: 0.6rem !important; padding: 1px 5px !important; }
+
+/* ── Landscape phones: sidebar becomes a slim icon rail ── */
+@media (max-height: 500px) and (max-aspect-ratio: 13/9) {
+  .sidebar { width: 9vmin !important; min-width: 9vmin !important; }
+  .sidebar-inner { padding: 2vmin 0; align-items: center; }
+  .sidebar .sidebar-text,
+  .sidebar .gd7-widget,
+  .sidebar .discord-widget { display: none !important; }
+  .sidebar .nav-item { justify-content: center; padding: 1.5vmin 0; }
+  .core-hub { margin: 3vmin auto 0 auto; }
 }

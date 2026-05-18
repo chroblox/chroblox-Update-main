@@ -34,11 +34,11 @@
   --surface2: rgba(var(--surface-rgb), 0.9);
   --aura-op: 0.08;
   --sh: 0 15px 40px rgba(0,0,0,0.08);
-  --glass-fill: rgba(255,255,255,0.5);
-  --glass-fill-h: rgba(255,255,255,0.7);
-  --glass-fill-strong: rgba(255,255,255,0.6);
-  --glass-bord: rgba(0,0,0,0.08);
-  --glass-bord-h: rgba(0,0,0,0.18);
+  --glass-fill: rgba(255,255,255,0.85);
+  --glass-fill-h: rgba(255,255,255,0.95);
+  --glass-fill-strong: rgba(255,255,255,0.9);
+  --glass-bord: rgba(0,0,0,0.15);
+  --glass-bord-h: rgba(0,0,0,0.3);
 }
 
 [data-mode="light"][data-theme="sakura"] { --bg: #fff2f5; }

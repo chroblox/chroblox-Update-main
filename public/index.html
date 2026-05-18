@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Chroblox | Workspace v1.5</title>
+    <title>Chroblox | Workspace v1.6</title>
     <meta name="description" content="Chroblox is a fast, secure web proxy optimized for Chromebooks." />
     
     <!-- ASSETS -->
@@ -57,6 +57,10 @@
             </div>
         </div>
 
+        <button id="panic-btn" class="stealth-pill-btn" style="background:#ff3b30; color:white;" title="Instant Mask (Press Esc)">
+            🚨 Mask Pro
+        </button>
+
         <div class="dropdown-wrapper" style="position: relative;">
             <button id="stealth-btn" class="stealth-pill-btn red-accent" title="Mask Tab">
                 <span class="stealth-icon">👻</span> Mask Tab
@@ -84,15 +88,16 @@
     <div id="update-overlay" class="hidden overlay-wrapper">
         <div class="update-content glass-panel">
             <div class="update-header">
-                <h2>🚀 Chroblox <span class="ac">v1.5</span> rolling out!</h2>
+                <h2>🚀 Chroblox <span class="ac">v1.6</span> rolling out!</h2>
                 <p style="color: var(--text-muted); margin-top: 5px;">Updates landing in waves over the next few days.</p>
             </div>
             <div class="update-body">
                 <p style="background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3); padding: 12px 14px; border-radius: 10px; margin: 0 0 18px 0; font-size: 0.92rem; color: var(--text);">
-                    <strong style="color: var(--ac);">⏳ Heads up:</strong> Movies and AI Studio aren't live yet — both are pending v1.5 sub-updates rolling out over the next few days. The rest of v1.5 ships now.
+                    <strong style="color: var(--ac);">⏳ Heads up:</strong> Movies and AI Studio aren't live yet — both are pending v1.6 sub-updates rolling out over the next few days. The rest of v1.6 ships now.
                 </p>
                 <p style="margin: 0 0 8px 0; font-weight: 700; letter-spacing: 0.5px;">✅ What's live now</p>
                 <ul>
+                    <li><strong>📱 Device UI Fixes:</strong> Improved cross-device responsiveness, ensuring no elements break or hide out of bounds.</li>
                     <li><strong>💧 Liquid Glass UI:</strong> Full launchpad redesign — premium glass, animated dock, auto-scrolling app rail.</li>
                     <li><strong>📱 New Shortcuts:</strong> TikTok, Twitch, Netflix, Quizlet, ChatGPT, Docs, GitHub — one tap from launch.</li>
                     <li><strong>🛡️ Stealth Boot:</strong> Educational decoy disguises the load screen from classroom monitoring.</li>
@@ -105,7 +110,7 @@
                     <li><strong>✨ AI Studio:</strong> Full conversational AI for homework, summaries, essays.</li>
                 </ul>
             </div>
-            <button id="close-update-btn" class="launch-btn" style="width:100%; margin-top: 15px; padding: 15px;">Let's go!</button>
+            <button id="close-update-btn" class="premium-launch-btn">Let's go!</button>
         </div>
     </div>
 
@@ -209,7 +214,10 @@
             <section id="view-launch" class="view-section active liquid-launch">
                 <div class="launch-main">
                     <div class="core-hub">
-                        <h1 class="hub-title">CHRO<span class="ac">BLOX</span><span class="version-tag">OS · v1.5</span></h1>
+                        <div class="hub-title-row">
+                            <h1 class="hub-title">CHRO<span class="ac">BLOX</span></h1>
+                            <span class="version-tag">OS · v1.6</span>
+                        </div>
                         <form id="sj-form" class="hub-search">
                             <input id="sj-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
                             <input id="sj-address" type="text" placeholder="Search the web or enter a URL..." autocomplete="off" />
@@ -278,26 +286,7 @@
             <!-- PAGE: APP VAULT (GAMES) -->
             <section id="view-games" class="view-section hidden vault-padding">
                 <div class="vault-container">
-                    <div class="vault-hero" style="display: flex; justify-content: space-between; align-items: center; overflow: hidden; position: relative;">
-                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&q=80" alt="Featured" class="hero-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.8;" />
-                        <div class="hero-overlay" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,12,16,1) 0%, rgba(10,12,16,0.7) 45%, rgba(10,12,16,0) 100%); z-index: 1;"></div>
-                        
-                        <div class="hero-content" style="position: relative; z-index: 2; max-width: 50%; padding: 40px; display: flex; flex-direction: column; align-items: flex-start;">
-                            <span class="hero-badge" style="background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 15px;">FEATURED APPLICATION</span>
-                            <h2 class="hero-title" style="font-size: clamp(2.5rem, 5vw, 4rem); margin: 0 0 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 900; text-shadow: 0 4px 15px rgba(0,0,0,0.5);">1v1.LOL</h2>
-                            <p class="hero-desc" style="font-size: 1.1rem; color: rgba(255,255,255,0.8); margin: 0 0 25px; line-height: 1.5; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Experience intense building and shooting action in this unblocked multiplayer battle royale. Compete globally and climb the ranks!</p>
-                            <button class="launch-btn hero-play-btn" style="padding: 14px 35px; font-size: 1.1rem; border-radius: 99px; font-weight: 800; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px var(--ag);" onclick="launchBrowser('https://1v1.lol')">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play Now
-                            </button>
-                        </div>
 
-                        <div class="hero-right" style="position: relative; z-index: 2; width: 40%; display: flex; justify-content: center; align-items: center; padding-right: 40px;">
-                             <div style="width: 200px; height: 200px; background: rgba(255,255,255,0.05); backdrop-filter: blur(25px); border-radius: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 80px var(--ag); border: 1px solid var(--glass-bord-h); transform: rotate(10deg);">
-                                  <svg viewBox="0 0 24 24" width="100" height="100" fill="white" style="filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); transform: rotate(-10deg);"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                             </div>
-                        </div>
-                    </div>
-                    
                     <div class="vault-toolbar">
                         <div class="glass-search-bar">
                             <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>

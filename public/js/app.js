@@ -50,6 +50,51 @@ navButtons.forEach(btn => {
     });
 });
 
+// --- MASK PRO / PANIC BUTTON ---
+window.isMaskProActive = false;
+window.originalTitleBeforeMask = "";
+
+window.triggerMaskPro = function() {
+    const screen = document.getElementById('boot-screen');
+    const decoy = document.getElementById('boot-decoy');
+    const nameReveal = document.getElementById('boot-name');
+    
+    if (!window.isMaskProActive) {
+        window.isMaskProActive = true;
+        window.originalTitleBeforeMask = document.title;
+        
+        if (screen) {
+            screen.classList.remove('hidden', 'fade-out');
+            screen.style.opacity = '1';
+            screen.style.pointerEvents = 'auto';
+            screen.onclick = function() {
+                if (window.isMaskProActive) window.triggerMaskPro();
+            };
+        }
+        if (decoy) {
+            decoy.classList.remove('hidden');
+        }
+        if (nameReveal) {
+            nameReveal.classList.remove('show');
+        }
+        document.title = 'Calculus 101 — Study Notes';
+    } else {
+        window.isMaskProActive = false;
+        if (screen) {
+            screen.classList.add('hidden');
+            screen.style.opacity = '0';
+            screen.style.pointerEvents = 'none';
+        }
+        document.title = window.originalTitleBeforeMask || 'Chroblox | Workspace v1.5';
+    }
+};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || e.key === '`') {
+        triggerMaskPro();
+    }
+});
+
 // --- CLOAKING ---
 window.handleCloak = function(type) {
     let title = "Chroblox | Workspace v1.5";
@@ -98,7 +143,7 @@ if (mobileBtn && sidebar) {
     mobileBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
     document.querySelectorAll('.nav-item').forEach(btn => {
         btn.addEventListener('click', () => {
-            if (window.innerWidth <= 850) sidebar.classList.remove('open');
+            if (window.matchMedia('(max-aspect-ratio: 1/1)').matches) sidebar.classList.remove('open');
         });
     });
 }
@@ -155,6 +200,10 @@ if (modeTog) {
 
 const tTog = document.getElementById('t-tog');
 const stealthBtn = document.getElementById('stealth-btn');
+const panicBtn = document.getElementById('panic-btn');
+if (panicBtn) {
+    panicBtn.addEventListener('click', triggerMaskPro);
+}
 
 if (tTog) {
     tTog.onclick = (e) => { 
